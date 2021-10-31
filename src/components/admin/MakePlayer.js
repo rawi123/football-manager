@@ -8,6 +8,7 @@ export default function MakePlayer() {
         position: "",
         attack: "",
         price: "",
+        goalKeeping:""
     })
     const [message, setMessage] = useState("refresh to update data")
 
@@ -26,6 +27,7 @@ export default function MakePlayer() {
             position: input.position.trim(),
             attack: parseInt(input.attack),
             price: parseInt(input.price),
+            goalKeeping:parseInt(input.goalKeeping),
             image:"https://github.com/rawi123/football-manager/blob/main/src/img/players/.png?raw=true"
         }
         const temp = await postPlayer(obj)
@@ -36,6 +38,7 @@ export default function MakePlayer() {
             position: "",
             attack: "",
             price: "",
+            goalKeeping:""
         })
         console.log(temp.data);
         setMessage("success")
@@ -54,6 +57,7 @@ export default function MakePlayer() {
                 <input type="text" name="defense" placeholder="defense" value={input.defense} onChange={handelChange} />
                 <input type="text" name="attack" placeholder="attack" value={input.attack} onChange={handelChange} />
                 <input type="text" name="position" placeholder="position" value={input.position} onChange={handelChange} />
+                <input type="text" name="goalKeeping" placeholder="GK" value={input.goalKeeping} onChange={handelChange} />
                 <input type="text" name="gameVision" placeholder="gameVision" value={input.gameVision} onChange={handelChange} />
                 <input type="text" name="price" placeholder="price" value={input.price} onChange={handelChange} />
 
