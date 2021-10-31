@@ -14,3 +14,9 @@ export function getPlayers(){
 export function postPlayer(obj){
     return axios.post(Players,obj)
 }
+
+export function putPlyaerImage(obj){
+    return axios.put(Players+"/"+obj.id,{
+        image:`https://github.com/rawi123/football-manager/blob/main/src/img/players/${obj.id}.png?raw=true`
+    })
+}

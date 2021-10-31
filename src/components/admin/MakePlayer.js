@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { postPlayer } from '../../api';
+import { postPlayer,getPlayers,putPlyaerImage } from '../../api';
 export default function MakePlayer() {
     const [input, setInput] = useState({
         name: "",
@@ -40,6 +40,12 @@ export default function MakePlayer() {
         console.log(temp.data);
         setMessage("success")
     }
+    const handelSync=async ()=>{
+        // (await getPlayers()).data.slice(40)
+        // .map(async val=>{
+        //     await putPlyaerImage(val)
+        // })
+    }
     return (
         <div className="login-card-form">
             <h4>Team Manager</h4>
@@ -53,6 +59,7 @@ export default function MakePlayer() {
 
             </form>
             <input className="submit" type="submit" value="Login" onClick={handelSignIn} />
+            <input className="submit" type="submit" value="SYNC" onClick={handelSync} />
             <h2>{message}</h2>
         </div>
     );
