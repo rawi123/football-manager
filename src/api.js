@@ -8,6 +8,9 @@ export function getUsers(){
 export function postUser(obj){
     return axios.post(USERS,obj)
 }
+export function getPlayers(){
+    return axios.get(Players)
+}
 export function postPlayer(obj){
     return axios.post(Players,obj)
 }

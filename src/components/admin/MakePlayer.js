@@ -26,7 +26,7 @@ export default function MakePlayer() {
             position: input.position.trim(),
             attack: parseInt(input.attack),
             price: parseInt(input.price),
-            image:"https://github.com/rawi123/football-manager/blob/main/src/img/players/.png"
+            image:"https://github.com/rawi123/football-manager/blob/main/src/img/players/.png?raw=true"
         }
         const temp = await postPlayer(obj)
         setInput({
