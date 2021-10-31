@@ -41,10 +41,10 @@ export default function MakePlayer() {
         setMessage("success")
     }
     const handelSync=async ()=>{
-        // (await getPlayers()).data.slice(40)
-        // .map(async val=>{
-        //     await putPlyaerImage(val)
-        // })
+        (await getPlayers()).data.slice(54)
+        .map(async val=>{
+            await putPlyaerImage(val)
+        })
     }
     return (
         <div className="login-card-form">
