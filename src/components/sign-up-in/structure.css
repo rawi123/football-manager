@@ -1,0 +1,192 @@
+:root {
+	--login-color: rgba(255, 255, 255, 1);
+}
+.login-page-background {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: white;
+	z-index: -10;
+	top: 0;
+}
+.login-page {
+	width: 100vw;
+	height: 80vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.login-card {
+	width: 70vw;
+	height: 70vh;
+	background: rgba(0, 0, 0, 0.4);
+	border-radius: 10px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.login-card::before {
+	content: "";
+	top: -2%;
+	left: -1%;
+	width: 102%;
+	height: 104%;
+	border: 2px solid var(--primary);
+	position: absolute;
+	border-radius: inherit;
+}
+.login-card > div:first-child {
+	width: 40%;
+	height: 80%;
+	background: var(--login-color);
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+	opacity: 0.8;
+}
+.login-card > div:first-child .bank-icon {
+	position: absolute;
+	top: -50px;
+	left: calc(50% - 50px);
+	background: var(--login-color);
+	width: 100px;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	font-size: 2rem;
+}
+.login-background {
+	background: url(../../img/signup-background.jpg)no-repeat center center/cover;
+	width: 100%;
+	border-radius: inherit;
+	height: 100%;
+	position: absolute;
+	z-index: -1;
+}
+.login-page .login-card input {
+	border: 1px solid black;
+}
+.login-input {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: 70%;
+}
+.login-input > input {
+	margin: 1rem;
+	padding: .8rem;
+	font-size: .8rem;
+	width: 100%;
+}
+.login-card-form {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
+	height: 80%;
+}
+.login-card-form .submit {
+	width: 70%;
+	padding: .8rem;
+	background: var(--primary);
+	opacity: .8;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all .3s;
+	font-size: 1.2rem;
+}
+.login-card-form .submit:hover {
+	opacity: .6;
+}
+.login-card h4 {
+	font-size: 2.5rem;
+}
+.login-card h2 {
+	color: red;
+	font-size: 1.1rem;
+	padding: .3rem;
+	text-align: center;
+}
+.login-page .login-card .register {
+	background: none;
+	border: none;
+	align-self: flex-end;
+	margin: .1rem;
+	font-size: 1rem;
+	color: rgba(77, 74, 74, 0.921);
+	cursor: pointer;
+	text-decoration: none;
+}
+.register-form {
+	/* margin-top: 50px; */
+}
+@media (min-width:1800px) {
+	.login-card{
+		margin-top: 100px;
+        height: 42vw;
+    }
+    .login-card>div:first-child{
+        height: 85%;
+    }
+}
+@media (max-width: 1820px) {
+	.register-form > h4:first-child {
+		font-size: 1.5rem;
+	}
+	.register-form {
+	}
+	.register-form input {
+		padding: .7rem !important;
+        margin: .6rem !important;
+	}
+	.login-card > div:first-child .bank-icon {
+		font-size: 2rem;
+		top: -25px;
+		left: calc(50% - 25px);
+		background: var(--login-color);
+		width: 50px;
+		height:50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		font-size: 2rem;
+	}
+    .login-card{
+        width: 70vw;
+		height: 80vh;
+		margin-top: 8vh;
+    }
+	.login-card > div:first-child{
+		width: 50%;
+	}
+	h2{
+		font-size: 1rem !important;
+		background: white;
+	}
+	
+}
+@media (max-width: 1280px) {
+    .login-card{
+        width: 60vw;
+    }
+    .login-card>div:first-child{
+        width: 70%;
+    }
+}
+@media (max-width: 800px) {
+    .login-card{
+        width: 100vw;
+    }
+    .login-card>div:first-child{
+        width: 80%;
+    }
+}
