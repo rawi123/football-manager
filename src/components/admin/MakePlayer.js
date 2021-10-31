@@ -44,14 +44,14 @@ export default function MakePlayer() {
         setMessage("success")
     }
     const handelSync=async ()=>{
-        (await getPlayers()).data.slice(54)
+        (await getPlayers()).data.slice(53)
         .map(async val=>{
             await putPlyaerImage(val)
         })
     }
     return (
-        <div className="login-card-form">
-            <h4>Team Manager</h4>
+        <div className="login-card-form" >
+            <h4 style={{background:"white",zIndex:1}}>Team Manager Admin</h4>
             <form className="login-input" onSubmit={(e)=>handelSignIn(e)}>
                 <input type="text" name="name" placeholder="name" value={input.name} onChange={handelChange} />
                 <input type="text" name="defense" placeholder="defense" value={input.defense} onChange={handelChange} />
@@ -62,8 +62,8 @@ export default function MakePlayer() {
                 <input type="text" name="price" placeholder="price" value={input.price} onChange={handelChange} />
 
             </form>
-            <input className="submit" type="submit" value="Login" onClick={handelSignIn} />
-            <input className="submit" type="submit" value="SYNC" onClick={handelSync} />
+            <input className="submit" type="submit" value="Login" onClick={handelSignIn} style={{background:"white"}}/>
+            <input className="submit" type="submit" value="SYNC" onClick={handelSync} style={{background:"white"}}/>
             <h2>{message}</h2>
         </div>
     );
