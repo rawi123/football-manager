@@ -27,7 +27,9 @@ function App() {
         <Route path="/admin-make-player">
           {loggedUser.isAdmin?<FormStructure Children={<MakePlayer user={loggedUser}/>} />:null}
         </Route>
-        
+        <Route exact path="/">
+            <Home></Home>
+        </Route>
       </Switch>
     </BrowserRouter>
 
