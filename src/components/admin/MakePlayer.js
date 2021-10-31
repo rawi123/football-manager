@@ -38,7 +38,7 @@ export default function MakePlayer() {
             attack: "",
             price: "",
         })
-        console.log(temp.data);
+        // console.log(temp.data);
     }
     return (
         <div className="login-card-form">
