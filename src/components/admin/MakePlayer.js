@@ -19,15 +19,14 @@ export default function MakePlayer() {
 
     const handelSignIn = async (e) => {
         e.preventDefault();
-        console.log(input.name);
-        console.log(123);
         const obj = {
             name: input.name.trim(),
             defense: parseInt(input.defense),
             gameVision: parseInt(input.gameVision),
             position: input.position.trim(),
             attack: parseInt(input.attack),
-            price: parseInt(input.price)
+            price: parseInt(input.price),
+            image:"https://github.com/rawi123/football-manager/blob/main/src/img/players/.png"
         }
         const temp = await postPlayer(obj)
         setInput({
@@ -38,7 +37,8 @@ export default function MakePlayer() {
             attack: "",
             price: "",
         })
-        // console.log(temp.data);
+        console.log(temp.data);
+        setMessage("success")
     }
     return (
         <div className="login-card-form">
@@ -46,10 +46,11 @@ export default function MakePlayer() {
             <form className="login-input" onSubmit={(e)=>handelSignIn(e)}>
                 <input type="text" name="name" placeholder="name" value={input.name} onChange={handelChange} />
                 <input type="text" name="defense" placeholder="defense" value={input.defense} onChange={handelChange} />
-                <input type="text" name="gameVision" placeholder="gameVision" value={input.gameVision} onChange={handelChange} />
-                <input type="text" name="position" placeholder="position" value={input.position} onChange={handelChange} />
                 <input type="text" name="attack" placeholder="attack" value={input.attack} onChange={handelChange} />
+                <input type="text" name="position" placeholder="position" value={input.position} onChange={handelChange} />
+                <input type="text" name="gameVision" placeholder="gameVision" value={input.gameVision} onChange={handelChange} />
                 <input type="text" name="price" placeholder="price" value={input.price} onChange={handelChange} />
+
             </form>
             <input className="submit" type="submit" value="Login" onClick={handelSignIn} />
             <h2>{message}</h2>
