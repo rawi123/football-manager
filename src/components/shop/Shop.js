@@ -11,7 +11,7 @@ export default function Shop({ players, userTeam, userProp, updateUserFather }) 
     const [cheapToExpensive, setCheapToExpensive] = useState(false);//set filter from top to buttom or otherwise
     const [message, setMessage] = useState("");//error message/success
     const [loggedTeam, setLoggedTeam] = useState({});//logged player team
-    const [refresh, setRefresh] = useState(false);//refresh page
+    const [refresh, setRefresh] = useState(true);//refresh page
     const [isBuying, setIsBuying] = useState(false);//enable/unable buying till the buying finishes
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -74,8 +74,6 @@ export default function Shop({ players, userTeam, userProp, updateUserFather }) 
     }
 
     const handelBuy = async (player) => {
-        console.log(player);
-        return
         if (player.price > user.money) {
             errMsg("not enough money")
             return
@@ -145,7 +143,7 @@ export default function Shop({ players, userTeam, userProp, updateUserFather }) 
                     {playerToBuy.slice(0, start).map(val => <Tr key={val.id} isBuying={isBuying} handelBuy={handelBuy} player={val}></Tr>)}
                 </tbody>
             </Table>
-            {start < 70 ? <Button color="secondary" size="lg" className="seeMoreBtn" onClick={() => setStart(start + 10)}>See More</Button> : null}
+            {start < players.length ? <Button color="secondary" size="lg" className="seeMoreBtn" onClick={() => setStart(start + 10)}>See More</Button> : null}
 
         </div>
     )

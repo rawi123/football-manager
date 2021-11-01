@@ -44,7 +44,7 @@ export default function MakePlayer() {
         setMessage("success")
     }
     const handelSync=async ()=>{
-        (await getPlayers()).data.slice(55)
+        (await getPlayers()).data.slice(70)
         .map(async val=>{
             await putPlyaerImage(val)
         })
