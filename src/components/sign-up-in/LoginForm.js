@@ -13,7 +13,9 @@ export default function LoginForm({ user,users, setLoggedUserCB }) {
         temp[e.target.name] = e.target.value
         setInput(temp)
     }
+
     let history = useHistory()
+
     const handelSignIn = () => {
         const temp = users.find(({ username, password }) => username === input.username && password === input.password);
         if (temp) {
@@ -22,10 +24,12 @@ export default function LoginForm({ user,users, setLoggedUserCB }) {
             history.push('/');
         } else setMessage('Wrong username/password');
     }
+
     if (Object.keys(user).length!==0){
         history.push("/")
         return <React.Fragment/>
     }
+    
     return (
         <div className="login-card-form">
             <h4>Team Manager</h4>

@@ -1,0 +1,67 @@
+.money-icon{
+    margin:0 .5rem;
+}
+.logo{
+    width: 100px;
+    height: 50px;
+    background: url(../../img/logo.png)no-repeat center center/cover;
+}
+.content-container{
+    position: relative;
+}
+.content-container::before{
+    content:"";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -10;
+    opacity: 0.9;
+    background: url("../../img/background.jpg") no-repeat center center/cover;
+}
+.content-container::after{
+    content:"";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -11;
+    opacity: 1;
+    background: rgb(61, 23, 78);
+}
+.table-row{
+    text-align: center;
+}
+.cart:hover{
+    opacity: 0.8;
+    cursor: pointer;
+
+}
+.table-container{
+    width: 90vw;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+.seeMoreBtn{
+    width: 90vw !important;
+    display: block;
+    border: none !important;
+    margin-bottom: 20px;
+    transition: all .3s !important;
+}
+.seeMoreBtn:hover{
+    opacity: 0.8;
+}
+.sort-by{
+    cursor: pointer;
+}
+.error-message{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+}
