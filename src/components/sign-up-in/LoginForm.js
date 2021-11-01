@@ -20,7 +20,6 @@ export default function LoginForm({ user,users, setLoggedUserCB }) {
         const temp = users.find(({ username, password }) => username === input.username && password === input.password);
         if (temp) {
             setLoggedUserCB(temp);
-            sessionStorage.setItem("user", JSON.stringify(temp))
             history.push('/');
         } else setMessage('Wrong username/password');
     }

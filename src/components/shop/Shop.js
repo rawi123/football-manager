@@ -4,44 +4,40 @@ import { Table, Button } from 'react-bootstrap';
 import { getTeam, putUserTeam, putUser } from '../../api';
 import Tr from './Tr';
 
-export default function Shop({players, userProp,  updateUserFather }) {
+export default function Shop({ players, userTeam, userProp, updateUserFather }) {
     const [user, setUser] = useState(userProp);
-    const [playerToBuy, setPlayerToBuy] = useState([])//set players to show after filtering owned players
-    const [start, setStart] = useState(10)//show first 10 then +10 each time
-    const [cheapToExpensive, setCheapToExpensive] = useState(false)//set filter from top to buttom or otherwise
-    const [message, setMessage] = useState("")//error message/success
+    const [playerToBuy, setPlayerToBuy] = useState([]);//set players to show after filtering owned players
+    const [start, setStart] = useState(10);//show first 10 then +10 each time
+    const [cheapToExpensive, setCheapToExpensive] = useState(false);//set filter from top to buttom or otherwise
+    const [message, setMessage] = useState("");//error message/success
     const [loggedTeam, setLoggedTeam] = useState({});//logged player team
-    const [refresh, setRefresh] = useState(false)//refresh page
-    const [isBuying, setIsBuying] = useState(false)//enable/unable buying till the buying finishes
-
-    useEffect(() => {
-        (async function () {
-            const team = (await getTeam(user.id)).data[0].team
-            setLoggedTeam(team)
-        }());
-    }, [players])
-
+    const [refresh, setRefresh] = useState(false);//refresh page
+    const [isBuying, setIsBuying] = useState(false);//enable/unable buying till the buying finishes
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         if (Object.keys(user).length !== 0 && players.length) {
-            
-            let temp = [...players];
-            for (const position in loggedTeam) {
-                loggedTeam[position].map(({ id }) => {
-                    temp = temp.filter(player => player.id !== id)
-                    return 1
-                });
-            };
-            setPlayerToBuy(temp)
+            setLoggedTeam(userTeam)
+            setAvilablePlayers(userTeam)
+
         }
         setIsBuying(false)
-    }, [refresh, players])
+        setLoading(false)
+    }, [refresh, userTeam])
 
     useEffect(() => {
-        console.log(1212, userProp.money);
         setUser(userProp)
     }, [userProp])
 
-
+    const setAvilablePlayers = (userTeam) => {
+        let temp = [...players];
+        for (const position in userTeam) {
+            userTeam[position].map(({ id }) => {
+                temp = temp.filter(player => player.id !== id)
+                return 1
+            });
+        };
+        setPlayerToBuy(temp)
+    }
 
     const sortByPrice = (str) => {
         const temp = [...playerToBuy]
@@ -78,8 +74,9 @@ export default function Shop({players, userProp,  updateUserFather }) {
     }
 
     const handelBuy = async (player) => {
+        console.log(player);
+        return
         if (player.price > user.money) {
-            console.log("no money");
             errMsg("not enough money")
             return
         }
@@ -124,6 +121,11 @@ export default function Shop({players, userProp,  updateUserFather }) {
     return (
         <div className="table-container">
             <h3 className={"error-message"}>{message}</h3>
+            {loading ? <div className="loader-shop"><h1>Loading Data</h1>
+                <div id="loading"></div> </div> : null}
+            {isBuying ? <div className="spinner-border loader" role="status">
+                <span className="sr-only ">Loading...</span>
+            </div> : null}
             <Table striped hover responsive="sm" variant="dark" >
                 <thead className="table-row">
                     <tr>

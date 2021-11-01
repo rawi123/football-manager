@@ -28,14 +28,14 @@ export default function SignupForm({ users, addUser }) {
 			setMessage("Passwords does not match")
 			return
 		}
-		// if (input.password.length < 8) {
-		// 	setMessage("Passwords must be at least 8 charecters")
-		// 	return
-		// }
-		// if (!/[1-9]/g.test(input.password)) {
-		// 	setMessage("Passwords must have at least a number")
-		// 	return
-		// }
+		if (input.password.length < 8) {
+			setMessage("Passwords must be at least 8 charecters")
+			return
+		}
+		if (!/[1-9]/g.test(input.password)) {
+			setMessage("Passwords must have at least a number")
+			return
+		}
 		if (users.some(({ username }) => input.username === username)) {
 			setMessage("Username alreday exist")
 			return
