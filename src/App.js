@@ -9,6 +9,9 @@ import Home from "./components/home/Home";
 import NavBar from "./components/header/Nav";
 import "bootstrap/dist/css/bootstrap.css"
 import Shop from "./components/shop/Shop";
+import PreView from "./components/teamOverview/PreView";
+
+
 function App() {
   const [loggedUser, setLoggedUser] = useState(JSON.parse(sessionStorage.getItem("user")) || {});
   const [users, setUsers] = useState([])
@@ -60,6 +63,9 @@ function App() {
           </Route>
           <Route exact path="/shop">
             <Shop userTeam={team} userProp={loggedUser} players={players} updateUserFather={updateBuy} />
+          </Route>
+          <Route exact path="/preview">
+            <PreView user={loggedUser} team={team}/>
           </Route>
         </Switch>
       </BrowserRouter>

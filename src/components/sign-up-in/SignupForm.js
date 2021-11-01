@@ -51,6 +51,81 @@ export default function SignupForm({ users, addUser }) {
 		const temp = (await postUser(userObj)).data
 		const obj = {
 			team: {
+				front: [
+					{
+						attack: 30,
+						defense: 20,
+						gameVision: 20,
+						goalKeeping: 0,
+						id: "76",
+						image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/76.png?raw=true",
+						name: "JÉRÉMIE BOGA",
+						nationality: "AR",
+						position: "LW",
+						price: 6500
+					},
+					{
+						attack: 55,
+						defense: 20,
+						gameVision: 35,
+						goalKeeping: 0,
+						id: "75",
+						image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/75.png?raw=true",
+						name: "VINÍCIUS",
+						nationality: "DE",
+						position: "ST",
+						price: 8000
+					},
+					{
+						attack: 40,
+						defense: 20,
+						gameVision: 12,
+						goalKeeping: 0,
+						id: "77",
+						image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/77.png?raw=true",
+						name: "AYOZE PÉREZ",
+						nationality: "ES",
+						position: "RW",
+						price: 2300
+					}
+				],
+				mid: [{
+					attack: 30,
+					defense: 30,
+					gameVision: 20,
+					goalKeeping: 0,
+					id: "72",
+					image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/72.png?raw=true",
+					name: "EXEQUIEL PALACIOS",
+					nationality: "CO",
+					position: "CM",
+					price: 2000
+				},
+				{
+					attack: 30,
+					defense: 45,
+					gameVision: 30,
+					goalKeeping: 0,
+					id: "73",
+					image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/73.png?raw=true",
+					name: "FÁBIO MARTINS",
+					nationality: "HR",
+					position: "LM",
+					price: 3500
+				},
+				{
+					attack: 20,
+					defense: 30,
+					gameVision: 45,
+					goalKeeping: 0,
+					id: "74",
+					image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/74.png?raw=true",
+					name: "PABLO PIATTI",
+					nationality: "AR",
+					position: "RM",
+					price: 5000
+				}
+				],
 				back: [
 					{
 						attack: 30,
@@ -99,81 +174,6 @@ export default function SignupForm({ users, addUser }) {
 						nationality: "CO",
 						position: "CB",
 						price: 4000
-					}
-				],
-				mid: [{
-					attack: 30,
-					defense: 30,
-					gameVision: 20,
-					goalKeeping: 0,
-					id: "72",
-					image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/72.png?raw=true",
-					name: "EXEQUIEL PALACIOS",
-					nationality: "CO",
-					position: "CM",
-					price: 2000
-				},
-				{
-					attack: 30,
-					defense: 45,
-					gameVision: 30,
-					goalKeeping: 0,
-					id: "73",
-					image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/73.png?raw=true",
-					name: "FÁBIO MARTINS",
-					nationality: "HR",
-					position: "LM",
-					price: 3500
-				},
-				{
-					attack: 20,
-					defense: 30,
-					gameVision: 45,
-					goalKeeping: 0,
-					id: "74",
-					image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/74.png?raw=true",
-					name: "PABLO PIATTI",
-					nationality: "AR",
-					position: "RM",
-					price: 5000
-				}
-				],
-				front: [
-					{
-						attack: 30,
-						defense: 20,
-						gameVision: 20,
-						goalKeeping: 0,
-						id: "76",
-						image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/76.png?raw=true",
-						name: "JÉRÉMIE BOGA",
-						nationality: "AR",
-						position: "LW",
-						price: 6500
-					},
-					{
-						attack: 55,
-						defense: 20,
-						gameVision: 35,
-						goalKeeping: 0,
-						id: "75",
-						image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/75.png?raw=true",
-						name: "VINÍCIUS",
-						nationality: "DE",
-						position: "ST",
-						price: 8000
-					},
-					{
-						attack: 40,
-						defense: 20,
-						gameVision: 12,
-						goalKeeping: 0,
-						id: "77",
-						image: "https://github.com/rawi123/football-manager/blob/main/src/img/players/77.png?raw=true",
-						name: "AYOZE PÉREZ",
-						nationality: "ES",
-						position: "RW",
-						price: 2300
 					}
 				],
 				GK: [
