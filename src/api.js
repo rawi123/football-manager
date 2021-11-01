@@ -12,6 +12,10 @@ export function putUser(id,obj){
     return axios.put(`${USERS}/${id}`,obj)
 }
 
+export function putUserTeam(id,obj){
+    return axios.put(`${USERS}/${id}/team/${id}`,obj)
+}
+
 export function getPlayers(){
     return axios.get(Players)
 }

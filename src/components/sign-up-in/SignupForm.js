@@ -53,7 +53,8 @@ export default function SignupForm({ users, addUser }) {
 			team: {
 				back: [],
 				mid: [],
-				front: []
+				front: [],
+				GK:[]
 			}
 		}
 		await postTeam(temp.id, obj)

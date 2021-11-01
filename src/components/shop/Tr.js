@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Tr({player, handelBuy}) {
+export default function Tr({player, handelBuy,isBuying}) {
     return (
         <tr className="table-row">
             <td>{player.id}</td>
@@ -11,8 +11,8 @@ export default function Tr({player, handelBuy}) {
             <td>{player.position}</td>
             <td >{player.price}$</td>
             <td>{player.nationality}</td>
-            <td><img src={player.image} style={{width:"80px", height:"100px"}}></img></td>
-            <td ><i className="cart fas fa-shopping-cart" onClick={()=>handelBuy(player)}></i></td>
+            <td><img src={player.image} alt="player" style={{width:"80px", height:"100px"}}></img></td>
+            <td ><i className="cart fas fa-shopping-cart" onClick={()=>!isBuying?handelBuy(player):null}></i></td>
         </tr>
     )
 }

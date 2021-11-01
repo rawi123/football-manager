@@ -1,34 +1,48 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router';
 import { Table, Button } from 'react-bootstrap';
-import { getTeam,putUser } from '../../api';
+import { getTeam, putUserTeam, putUser } from '../../api';
 import Tr from './Tr';
-export default function Shop({ user, players }) {
-    const [playerToBuy, setPlayerToBuy] = useState([])
-    const [start, setStart] = useState(10)
-    const [cheapToExpensive, setCheapToExpensive] = useState(false)
-    const [message, setMessage] = useState("")
-    const [loggedTeam, setLoggedTeam] = useState({});
+
+export default function Shop({players, userProp,  updateUserFather }) {
+    const [user, setUser] = useState(userProp);
+    const [playerToBuy, setPlayerToBuy] = useState([])//set players to show after filtering owned players
+    const [start, setStart] = useState(10)//show first 10 then +10 each time
+    const [cheapToExpensive, setCheapToExpensive] = useState(false)//set filter from top to buttom or otherwise
+    const [message, setMessage] = useState("")//error message/success
+    const [loggedTeam, setLoggedTeam] = useState({});//logged player team
+    const [refresh, setRefresh] = useState(false)//refresh page
+    const [isBuying, setIsBuying] = useState(false)//enable/unable buying till the buying finishes
+
+    useEffect(() => {
+        (async function () {
+            const team = (await getTeam(user.id)).data[0].team
+            setLoggedTeam(team)
+        }());
+    }, [players])
 
     useEffect(() => {
         if (Object.keys(user).length !== 0 && players.length) {
+            
             let temp = [...players];
-            (async function () {
-                const team = (await getTeam(user.id)).data[0].team
-                for (const position in team) {
-                    team[position].map(({ id }) => {
-                        temp = temp.filter(player => player.id !== id)
-                    });
-                };
-                setPlayerToBuy(temp)
-                setLoggedTeam(team)
-            }());
+            for (const position in loggedTeam) {
+                loggedTeam[position].map(({ id }) => {
+                    temp = temp.filter(player => player.id !== id)
+                    return 1
+                });
+            };
+            setPlayerToBuy(temp)
         }
-    }, [players, user])
+        setIsBuying(false)
+    }, [refresh, players])
 
-    if (Object.keys(user).length === 0) {
-        return <Redirect to="/login" />
-    }
+    useEffect(() => {
+        console.log(1212, userProp.money);
+        setUser(userProp)
+    }, [userProp])
+
+
+
     const sortByPrice = (str) => {
         const temp = [...playerToBuy]
 
@@ -41,54 +55,70 @@ export default function Shop({ user, players }) {
         setCheapToExpensive(!cheapToExpensive)
     }
 
+    const buy = async (position, player) => {
+        setIsBuying(true)
+        const updateMoney = { "money": user.money - player.price }
+        const team = { ...loggedTeam };
+        const userTemp = { ...user };
+        userTemp.money = user.money - player.price;
+        team[position] = [...team[position], player]
+        await putUserTeam(user.id, { "team": team })
+        await putUser(user.id, updateMoney)
+        setUser(userTemp);
+        setLoggedTeam(team)
+        setRefresh(!refresh)
+        updateUserFather(userTemp, team)
+    }
+
+    const errMsg = (msg) => {
+        setMessage(msg)
+        setTimeout(() => {
+            setMessage("")
+        }, 2000);
+    }
+
     const handelBuy = async (player) => {
-        // if (player.price > user.money) {
-        //     setMessage("not enough money")
-        //     setTimeout(() => {
-        //         setMessage("")
-        //     }, 2000);
-        //     return
-        // }
+        if (player.price > user.money) {
+            console.log("no money");
+            errMsg("not enough money")
+            return
+        }
+
         if (player.position === "CB" || player.position === "LB" || player.position === "RB") {
-            
-            if (loggedTeam.back.length === 4) {
-                setMessage("Cannot buy any more defensive players")
-                setTimeout(() => {
-                    setMessage("")
-                }, 2000);
-                return
-            }
-            else{
-                console.log("buy");
-            }
+
+            if (loggedTeam.back.length === 4) { errMsg("Cannot buy any more defensive players") }
+
+            else { buy("back", player) }
+            return
         }
+
         if (player.position === "CM" || player.position === "LM" || player.position === "RM") {
-            if (loggedTeam.mid.length === 3) {
-                setMessage("Cannot buy any more mid players")
-                setTimeout(() => {
-                    setMessage("")
-                }, 2000);
-                return
-            }
-            else{
-                console.log("buy");
-            }
+
+            if (loggedTeam.mid.length === 3) { errMsg("Cannot buy any more mid players") }
+
+            else { buy("mid", player) }
+            return
         }
+
         if (player.position === "ST" || player.position === "LW" || player.position === "RW") {
-            console.log("front");
-            if (loggedTeam.front.length === 3) {
-                setMessage("Cannot buy any more attacking players")
-                setTimeout(() => {
-                    setMessage("")
-                }, 2000);
-                return
-            }
-            else{
 
-                console.log("buy");
-            }
+            if (loggedTeam.front.length === 3) { errMsg("Cannot buy any more attacking players") }
+
+            else { buy("front", player) }
+            return
         }
 
+        if (player.position === "GK") {
+
+            if (loggedTeam.GK.length === 1) { errMsg("Cannot buy any more goalkeepers") }
+
+            else { buy("GK", player) }
+        }
+
+    }
+
+    if (Object.keys(user).length === 0) {
+        return <Redirect to="/login" />
     }
 
     return (
@@ -110,7 +140,7 @@ export default function Shop({ user, players }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {playerToBuy.slice(0, start).map(val => <Tr key={val.id} handelBuy={handelBuy} player={val}></Tr>)}
+                    {playerToBuy.slice(0, start).map(val => <Tr key={val.id} isBuying={isBuying} handelBuy={handelBuy} player={val}></Tr>)}
                 </tbody>
             </Table>
             {start < 70 ? <Button color="secondary" size="lg" className="seeMoreBtn" onClick={() => setStart(start + 10)}>See More</Button> : null}
