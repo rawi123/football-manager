@@ -13,13 +13,21 @@ function App() {
   const [loggedUser, setLoggedUser] = useState(JSON.parse(sessionStorage.getItem("user")) || {});
   const [users, setUsers] = useState([])
   const [players, setPlayers] = useState([])
+  const [team,setTeam]=useState([])
+
   useEffect(() => {
     (async function () {
       setUsers((await getUsers()).data)
       setPlayers((await getPlayers()).data)
     }())
-
   }, [])
+
+
+  const updateBuy=(user,team)=>{
+    setLoggedUser(user)  
+    setTeam(team)
+    sessionStorage.setItem("user",JSON.stringify(user))
+  }
 
   return (
     <div className="content-container">
@@ -39,7 +47,7 @@ function App() {
             <Home players={players} ></Home>
           </Route>
           <Route exact path="/shop">
-            <Shop user={loggedUser} players={players} />
+            <Shop userProp={loggedUser} players={players} updateUserFather={updateBuy} />
           </Route>
         </Switch>
       </BrowserRouter>
