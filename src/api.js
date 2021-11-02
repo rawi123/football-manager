@@ -28,12 +28,14 @@ export function putPlyaerImage(obj){
         image:`https://github.com/rawi123/football-manager/blob/main/src/img/players/${obj.id}.png?raw=true`
     })
 }
+
 export function getTeam(id){
     return axios.get(`${USERS}/${id}/team`)
 }
 export function postTeam(id,obj){
     return axios.post(`${USERS}/${id}/team`,obj)
 }
+
 export function putFormation(id,obj){
     return axios.put(`${USERS}/${id}/team/${id}`,obj)
 }
