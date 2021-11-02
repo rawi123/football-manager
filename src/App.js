@@ -30,6 +30,7 @@ function App() {
         setFormation(team.formation)
       }
     }())
+    //eslint-disable-next-line
   }, [])
 
 

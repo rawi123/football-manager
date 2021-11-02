@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./style.css"
 import PlayerCard from './PlayerCard'
 
+
 export default function PreView({ user, team, formation, setFormation, updateBuy }) {
     const [teamLite, setTeamLite] = useState([])//stright array for all players to use - lite
     const [teamFormation, setTeamFormation] = useState({})//team formation
@@ -28,11 +29,13 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
         for (const positionRow in team) {
             team[positionRow].map(val => {
                 teamLite.push(val)
+                return 1
             });
         }
         setTeamLite(teamLite)
         setTeamFormation(formation)
         setTeamFormationCopy({ ...formation })
+        //eslint-disable-next-line
     }, [user, formation])
 
     const notify = (name) => toast.success(name, {

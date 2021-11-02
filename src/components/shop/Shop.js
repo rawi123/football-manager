@@ -25,6 +25,7 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
         }
         setIsBuying(false)
         setLoading(false)
+        //eslint-disable-next-line
     }, [refresh, userTeam])
 
     useEffect(() => {//every userchange set new user
@@ -62,6 +63,7 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
     const setAvilablePlayers = (userTeam) => {//get user team and filter to show only players that can buy
         let temp = [...players];
         for (const position in userTeam) {
+            //eslint-disable-next-line
             userTeam[position].map(({ id }) => {
                 temp = temp.filter(player => player.id !== id)
                 return 1
