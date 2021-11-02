@@ -34,3 +34,6 @@ export function getTeam(id){
 export function postTeam(id,obj){
     return axios.post(`${USERS}/${id}/team`,obj)
 }
+export function putFormation(id,obj){
+    return axios.put(`${USERS}/${id}/team/${id}`,obj)
+}

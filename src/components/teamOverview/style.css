@@ -1,42 +1,110 @@
-.preview-container{
-    width: 100%;
-    height: 85vh;
-    display: flex;
+.preview-container {
+	width: 100%;
+	height: 85vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.preview-background {
+	position: relative;
+	width: 50%;
+	margin-top: 5vh;
+	height: 100%;
+	background: url("../../img/team-display-background.jpg")no-repeat center center/cover;
+}
+.position-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	height: 25%;
+}
+.card {
+	width: 115px;
+	height: 150px;
+	cursor: pointer;
+	position: relative;
+}
+.card::after {
+	content: attr(data-player-position);
+	font-size: 20px;
+	position: absolute;
+	bottom: -5px;
+	font-weight: 800;
+	left: 40%;
+}
+.card-up {
+	transform: translateY(-20px);
+}
+.ST::after {
+	content: "ST";
+	width: 50px;
+	height: 30px;
+	top: 102%;
+	left: calc(50% - 25px);
+	position: absolute;
+	text-align: center;
+	background-color: rgba(255, 248, 220, 0.795);
+	border-radius: 10px;
+}
+.save-formation,
+.reset-formation {
+	background-color: #6c757d;
+	color: white;
+	border: none;
+	font-size: 1.5rem;
+	margin: 20px;
+	position: absolute;
+	top: 40%;
+	left: 100%;
+	padding: 0.6rem 4rem;
+	border-radius: 3px;
+	height: 60px;
+	box-shadow: 1px 3px 5px #6c757d;
+    transition: all .3s;
+}
+.save-formation:hover,
+.reset-formation:hover{
+    background-color: #5d656bd3;
+}
+
+.reset-formation{
+    top: calc(40% + 80px);
+}
+.loader-pre-view{
+    position: absolute;
+    top:calc(50% - 50px);
+    left:calc(50% - 50px);
+    width: 100px;
+    height: 100px;
+}
+
+.player-info{
+    position: absolute;
+    left: 0;
+    top: 40%;
+    background-color: transparent;
+    color: white;
     align-items: center;
     justify-content: center;
+    animation:pop-up .75s ease-in-out forwards;
 }
-.preview-background{
-    width: 50%;
-    margin-top: 5vh;
-    height: 100%;
-    background:url("../../img/team-display-background.jpg")no-repeat center center/cover;
-}
-.position-row{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    height: 25%;
-}
-.card{
-    width: 120px;
-    height: 160px;
-}
-.ST::after{
-    content: "ST";
-    width: 50px;
-    height: 30px;
-    top: 102%;
-    left: calc(50% - 25px);
-    position: absolute;
-    text-align: center;
-    background-color: rgba(255, 248, 220, 0.795);
-    border-radius: 10px;
-    
-    /* background-color: black; */
-}
-@media (max-width:700px) {
-    .card{
-        width: 60px;
-        height: 80px;
+@keyframes pop-up {
+    0%{
+        transform:scale(0) translateY(-100%);
     }
+    100%{
+        transform:  scale3d(1) translateY(0);
+    }
+}
+@media (max-width: 700px) {
+	.card {
+		width: 60px;
+		height: 80px;
+	}
+}
+@media (max-width: 900px) {
+	.card {
+		width: 70px;
+		height: 90px;
+	}
 }

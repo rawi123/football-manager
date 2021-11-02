@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router';
 import { Table, Button } from 'react-bootstrap';
-import { getTeam, putUserTeam, putUser } from '../../api';
+import { putUserTeam, putUser, putFormation } from '../../api';
 import Tr from './Tr';
 
-export default function Shop({ players, userTeam, userProp, updateUserFather }) {
+export default function Shop({ players, userTeam, userProp, updateUserFather, formation }) {
     const [user, setUser] = useState(userProp);
     const [playerToBuy, setPlayerToBuy] = useState([]);//set players to show after filtering owned players
     const [start, setStart] = useState(10);//show first 10 then +10 each time
@@ -51,6 +51,69 @@ export default function Shop({ players, userTeam, userProp, updateUserFather }) 
         setCheapToExpensive(!cheapToExpensive)
     }
 
+
+
+    const checkFormationEmpty = (formationTemp, pos1, pos2, pos3 = false) => {
+        if (!formationTemp[pos1])
+            return pos1
+        if (!formationTemp[pos2])
+            return pos2
+        if(pos3 && !formation[pos3])
+            return pos3
+    }
+
+
+
+    const errMsg = (msg) => {
+        setMessage(msg)
+        setTimeout(() => {
+            setMessage("")
+        }, 2000);
+    }
+
+    const setNewFormation=async (position,formationTemp,player)=>{
+        formationTemp[position]=parseInt(player.id)
+        await putFormation(user.id,{"formation":formationTemp})
+        return formationTemp
+    }
+    const updateFormation = async (player, position) => {
+        const formationTemp = { ...formation };
+
+        if (player.position === "GK") {
+            return (await setNewFormation("GK",formationTemp,player));
+        }
+        if (player.position === "CB") {
+            if (!formationTemp[`CB1`]) {
+                return (await setNewFormation("CB1",formationTemp,player));
+            }
+            if (!formationTemp[`CB2`]) {
+                return (await setNewFormation("CB2",formationTemp,player));
+            }
+            else {
+                if (!formationTemp["LB"]) {
+                    return (await setNewFormation("LB",formationTemp,player));
+                }
+                if (!formationTemp["RB"]) {
+                    return (await setNewFormation("RB",formationTemp,player));
+                }
+            }
+        }
+        if (!formationTemp[player.position]) {
+            return setNewFormation(player.position,formationTemp,player)
+        }
+        if (position === "back") {
+            const positionToUpdate = checkFormationEmpty(formationTemp, "RB", "CB")
+            return (await setNewFormation(positionToUpdate,formationTemp,player));
+        }
+        if(position==="mid"){
+            const positionToUpdate = checkFormationEmpty(formationTemp, "RM", "CM","LM")
+            return (await setNewFormation(positionToUpdate,formationTemp,player));
+        }
+        if(position==="front"){
+            const positionToUpdate = checkFormationEmpty(formationTemp, "RW", "ST","LW")
+            return (await setNewFormation(positionToUpdate,formationTemp,player));
+        }
+    }
     const buy = async (position, player) => {
         setIsBuying(true)
         const updateMoney = { "money": user.money - player.price }
@@ -63,17 +126,11 @@ export default function Shop({ players, userTeam, userProp, updateUserFather }) 
         setUser(userTemp);
         setLoggedTeam(team)
         setRefresh(!refresh)
-        updateUserFather(userTemp, team)
-    }
-
-    const errMsg = (msg) => {
-        setMessage(msg)
-        setTimeout(() => {
-            setMessage("")
-        }, 2000);
+        updateUserFather(userTemp, team,await updateFormation(player, position))
     }
 
     const handelBuy = async (player) => {
+
         if (player.price > user.money) {
             errMsg("not enough money")
             return

@@ -190,6 +190,19 @@ export default function SignupForm({ users, addUser }) {
 						price: 25000
 					}
 				]
+			},
+			"formation": {
+				"LW": 76,
+				"ST": 75,
+				"RW": 77,
+				"LM": 73,
+				"CM": 72,
+				"RM": 74,
+				"LB": 71,
+				"CB1": 68,
+				"CB2": 69,
+				"RB": 70,
+				"GK": 67
 			}
 		}
 		await postTeam(temp.id, obj)

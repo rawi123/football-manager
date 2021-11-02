@@ -10,6 +10,7 @@ import NavBar from "./components/header/Nav";
 import "bootstrap/dist/css/bootstrap.css"
 import Shop from "./components/shop/Shop";
 import PreView from "./components/teamOverview/PreView";
+import Train from "./components/train/Train";
 
 
 function App() {
@@ -17,14 +18,16 @@ function App() {
   const [users, setUsers] = useState([])
   const [players, setPlayers] = useState([])
   const [team, setTeam] = useState([])
+  const [formation,setFormation]=useState([])
 
   useEffect(() => {
     (async function () {
       setUsers((await getUsers()).data)
       setPlayers((await getPlayers()).data)
       if(Object.keys(loggedUser).length!==0){
-        const team = (await getTeam(loggedUser.id)).data[0].team
-        setTeam(team)
+        const team = (await getTeam(loggedUser.id)).data[0]
+        setTeam(team.team)
+        setFormation(team.formation)
       }
     }())
   }, [])
@@ -33,14 +36,16 @@ function App() {
   const handelSignIn = async (user) => {
     setLoggedUser(user)
     sessionStorage.setItem("user", JSON.stringify(user))
-    const team = (await getTeam(user.id)).data[0].team
-    setTeam(team)
+    const team = (await getTeam(user.id)).data[0]
+    setTeam(team.team)
+    setFormation(team.formation)
   }
 
 
-  const updateBuy = (user, team) => {
-    setLoggedUser(user)
-    setTeam(team)
+  const updateBuy = (user, team,formation) => {
+    setLoggedUser(user);
+    setTeam(team);
+    setFormation(formation);
     sessionStorage.setItem("user", JSON.stringify(user))
   }
 
@@ -62,10 +67,13 @@ function App() {
             <Home players={players} ></Home>
           </Route>
           <Route exact path="/shop">
-            <Shop userTeam={team} userProp={loggedUser} players={players} updateUserFather={updateBuy} />
+            <Shop formation={formation} userTeam={team} userProp={loggedUser} players={players} updateUserFather={updateBuy} />
           </Route>
           <Route exact path="/preview">
-            <PreView user={loggedUser} team={team}/>
+            <PreView user={loggedUser} setFormation={setFormation} team={team} formation={formation}/>
+          </Route>
+          <Route exact path="/train">
+            <Train user={loggedUser}  formationProp={formation} team={team}/>
           </Route>
         </Switch>
       </BrowserRouter>
