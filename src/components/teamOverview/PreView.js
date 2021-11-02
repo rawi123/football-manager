@@ -10,20 +10,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./style.css"
 import PlayerCard from './PlayerCard'
 export default function PreView({ user, team, formation, setFormation, updateBuy }) {
-    const [teamLite, setTeamLite] = useState([])
-    const [teamFormation, setTeamFormation] = useState({})
-    const [teamFormationCopy, setTeamFormationCopy] = useState({})
-    const [transform, setTransform] = useState("")
-    const [enable, setEnable] = useState(false)
-    const [enableSell, setEnableSell] = useState(true)
-    const [saved, setSaved] = useState({
+    const [teamLite, setTeamLite] = useState([])//stright array for all players to use - lite
+    const [teamFormation, setTeamFormation] = useState({})//team formation
+    const [teamFormationCopy, setTeamFormationCopy] = useState({})//keep a safe copy for reset
+    const [transform, setTransform] = useState("")//only for clicking on player - animation
+    const [enable, setEnable] = useState(false)//enable for save and reset
+    const [enableSell, setEnableSell] = useState(true)//enable sell players so not making alot of request at once only after each request finishes
+    const [saved, setSaved] = useState({//on player click save this data
         id: "",
         img: "",
         position: "",
         player: ""
     })
 
-    useEffect(() => {
+    useEffect(() => {//set teams formation and make a team lite on every father render
         setEnable(false)
         const teamLite = [];
         for (const positionRow in team) {
@@ -64,11 +64,12 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
         progress: undefined,
     });
 
-    if (Object.keys(user).length === 0) {
+    if (Object.keys(user).length === 0) {//if user not logged in redirect to login
         return <Redirect to="/login" />
     }
 
-    const handelClick = (player, position) => {
+    const handelClick = (player, position) => {//click on div if there is no player save his data and give him animation
+        //if clicking on empty then set as empty  - the player object will be empty and if he is the second dont do anything
         if (saved.id) {
             if (player.id) {
                 const formationTemp = { ...teamFormation }
@@ -85,7 +86,7 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
         }
     }
 
-    const returnPlayers = () => {
+    const returnPlayers = () => {//return array of players as divs and add handlers 
         let temp = [],
             arr = [],
             counter = 0;
@@ -114,20 +115,20 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
         return temp
     }
 
-    const border = (player, position) => {
+    const border = (player, position) => {//return border to give player
         return player.position === position || player.position + "1" === position || player.position + "2" === position ? "3px solid green" : "3px solid red";
     }
 
-    const handelSave = async () => {
+    const handelSave = async () => {//save formation add to api
         await putFormation(user.id, { "formation": teamFormation })
         setFormation(teamFormation)
     }
 
-    const handelCopy = () => {
+    const handelCopy = () => {//reset to the copy
         setFormation(teamFormationCopy)
     }
 
-    const sellPlayer = async (player) => {
+    const sellPlayer = async (player) => {//get a player and handel selling it for 80% of its price - change in all relevant places- formation team money and send to parent to update
         setEnableSell(false);
         try {
             notifyWait("pending");
@@ -152,7 +153,7 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
         setEnableSell(true)
     }
 
-    const removePlayerFromTeam = (player) => {
+    const removePlayerFromTeam = (player) => {//remove player from team in the position that needs tobe changed
         let teamTemp = { ...team }
         if (player.position === "GK") {
             teamTemp.GK = teamTemp.GK.slice(0, 0);

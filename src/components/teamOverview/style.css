@@ -86,8 +86,9 @@
     color: white;
     align-items: center;
     justify-content: center;
-    animation:pop-up .75s ease-in-out forwards;
+    animation:pop-up .45s ease-in-out forwards;
 }
+
 @keyframes pop-up {
     0%{
         transform:scale(0) translateY(-100%);
