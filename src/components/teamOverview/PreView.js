@@ -3,6 +3,8 @@ import { Redirect } from 'react-router'
 import { putFormation } from '../../api'
 import { Spinner } from "react-bootstrap"
 import { putUser, putUserTeam } from '../../api'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 import "./style.css"

@@ -42,11 +42,11 @@ function App() {
   }
 
 
-  const updateBuy = (user, team,formation) => {
+  const updateBuy = (user,team,formation) => {
     setLoggedUser(user);
     setTeam(team);
     setFormation(formation);
-    sessionStorage.setItem("user", JSON.stringify(user))
+    sessionStorage.setItem("user", JSON.stringify(user));
   }
 
   return (
@@ -70,7 +70,7 @@ function App() {
             <Shop formation={formation} userTeam={team} userProp={loggedUser} players={players} updateUserFather={updateBuy} />
           </Route>
           <Route exact path="/preview">
-            <PreView user={loggedUser} setFormation={setFormation} team={team} formation={formation}/>
+            <PreView user={loggedUser} updateBuy={updateBuy} setFormation={setFormation} team={team} formation={formation}/>
           </Route>
           <Route exact path="/train">
             <Train user={loggedUser}  formationProp={formation} team={team}/>

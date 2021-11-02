@@ -1,6 +1,9 @@
 import React from 'react'
 import { Card, Button } from 'react-bootstrap'
-export default function PlayerCard({ player }) {
+export default function PlayerCard({ player,sellPlayer,enableSell }) {
+    if(!player.id){
+        return <></>
+    }
     return (
         <Card style={{ width: '18rem' }} className="player-info">
             <Card.Img variant="top" src={player.image} style={{ width: '4rem' }} />
@@ -22,6 +25,7 @@ export default function PlayerCard({ player }) {
                         </Card.Text>
                     </React.Fragment>
                 }
+            <Button variant="primary" onClick={()=>enableSell?sellPlayer(player):null}>Sell-{(80/100)*parseInt(player.price)}</Button>
             </Card.Body>
             <Card.Footer className="">{player.position}</Card.Footer>
         </Card>

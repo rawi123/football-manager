@@ -8,6 +8,7 @@ export default function Tr({player, handelBuy,isBuying}) {
             <td>{player.defense}</td>
             <td>{player.gameVision}</td>
             <td>{player.attack}</td>
+            <td>{player.goalKeeping?player.goalKeeping:0}</td>
             <td>{player.position}</td>
             <td >{player.price}$</td>
             <td>{player.nationality}</td>

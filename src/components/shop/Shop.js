@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router';
 import { Table, Button } from 'react-bootstrap';
 import { putUserTeam, putUser, putFormation } from '../../api';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Tr from './Tr';
 
 export default function Shop({ players, userTeam, userProp, updateUserFather, formation }) {
@@ -14,7 +16,8 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
     const [refresh, setRefresh] = useState(true);//refresh page
     const [isBuying, setIsBuying] = useState(false);//enable/unable buying till the buying finishes
     const [loading, setLoading] = useState(true);
-    useEffect(() => {
+
+    useEffect(() => {//set team after every refresh change and userteam
         if (Object.keys(user).length !== 0 && players.length) {
             setLoggedTeam(userTeam)
             setAvilablePlayers(userTeam)
@@ -24,11 +27,39 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
         setLoading(false)
     }, [refresh, userTeam])
 
-    useEffect(() => {
+    useEffect(() => {//every userchange set new user
         setUser(userProp)
     }, [userProp])
 
-    const setAvilablePlayers = (userTeam) => {
+    const notify = (name) => toast.success(name, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+    const notifyWait = (name) => toast.info(name, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+    });
+    const notifyFail = () => toast.error(" Could not complete purchase", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+
+    const setAvilablePlayers = (userTeam) => {//get user team and filter to show only players that can buy
         let temp = [...players];
         for (const position in userTeam) {
             userTeam[position].map(({ id }) => {
@@ -39,11 +70,10 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
         setPlayerToBuy(temp)
     }
 
-    const sortByPrice = (str) => {
+    const sortBy = (str) => {
         const temp = [...playerToBuy]
-
-        if (str === "name")
-            setPlayerToBuy(temp.sort((a, b) => cheapToExpensive ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)))
+        if (str === "name"||str==="position")
+            setPlayerToBuy(temp.sort((a, b) => cheapToExpensive ? a[str].localeCompare(b[str]) : b[str].localeCompare(a[str])))
 
         else
             setPlayerToBuy(temp.sort((a, b) => cheapToExpensive ? a[str] - b[str] : b[str] - a[str]))
@@ -51,9 +81,7 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
         setCheapToExpensive(!cheapToExpensive)
     }
 
-
-
-    const checkFormationEmpty = (formationTemp, pos1, pos2, pos3 = false) => {
+    const checkFormationEmpty = (formationTemp, pos1, pos2, pos3 = false) => {//get positions and return the empty avilable position between them in formation
         if (!formationTemp[pos1])
             return pos1
         if (!formationTemp[pos2])
@@ -62,21 +90,20 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
             return pos3
     }
 
-
-
-    const errMsg = (msg) => {
+    const errMsg = (msg) => {//dsplay err msg
         setMessage(msg)
         setTimeout(() => {
             setMessage("")
         }, 2000);
     }
 
-    const setNewFormation=async (position,formationTemp,player)=>{
+    const setNewFormation=async (position,formationTemp,player)=>{//update the formation with the position to put player formation and player- put in api and return updated formation object
         formationTemp[position]=parseInt(player.id)
         await putFormation(user.id,{"formation":formationTemp})
         return formationTemp
     }
-    const updateFormation = async (player, position) => {
+
+    const updateFormation = async (player, position) => {//check where to update formation . get player and where he should play
         const formationTemp = { ...formation };
 
         if (player.position === "GK") {
@@ -114,22 +141,30 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
             return (await setNewFormation(positionToUpdate,formationTemp,player));
         }
     }
-    const buy = async (position, player) => {
-        setIsBuying(true)
-        const updateMoney = { "money": user.money - player.price }
-        const team = { ...loggedTeam };
-        const userTemp = { ...user };
-        userTemp.money = user.money - player.price;
-        team[position] = [...team[position], player]
-        await putUserTeam(user.id, { "team": team })
-        await putUser(user.id, updateMoney)
-        setUser(userTemp);
-        setLoggedTeam(team)
-        setRefresh(!refresh)
-        updateUserFather(userTemp, team,await updateFormation(player, position))
+
+    const buy = async (position, player) => {//if player can buy send position abd player to this function and update component father and api
+        notifyWait("Pending...")
+        try{
+            setIsBuying(true)
+            const updateMoney = { "money": user.money - player.price }
+            const team = { ...loggedTeam };
+            const userTemp = { ...user };
+            userTemp.money = user.money - player.price;
+            team[position] = [...team[position], player]
+            await putUserTeam(user.id, { "team": team })
+            await putUser(user.id, updateMoney)
+            setUser(userTemp);
+            setLoggedTeam(team)
+            setRefresh(!refresh)
+            updateUserFather(userTemp, team,await updateFormation(player, position))
+            notify("Bought Successfully"+player.name)
+        }
+        catch{
+            notifyFail()
+        }
     }
 
-    const handelBuy = async (player) => {
+    const handelBuy = async (player) => {//check if canbuy the player -enough money and enough place and send to functions to complete buy
 
         if (player.price > user.money) {
             errMsg("not enough money")
@@ -169,12 +204,13 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
 
     }
 
-    if (Object.keys(user).length === 0) {
+    if (Object.keys(user).length === 0) {//if there is no logged user send to login
         return <Redirect to="/login" />
     }
 
     return (
         <div className="table-container">
+            <ToastContainer />
             <h3 className={"error-message"}>{message}</h3>
             {loading ? <div className="loader-shop"><h1>Loading Data</h1>
                 <div id="loading"></div> </div> : null}
@@ -185,12 +221,13 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
                 <thead className="table-row">
                     <tr>
                         <th>#</th>
-                        <th className="sort-by" onClick={() => sortByPrice("name")}>Name <i className="fas fa-sort-down"></i></th>
-                        <th className="sort-by" onClick={() => sortByPrice("defense")}>Defense <i className="fas fa-sort-down"></i></th>
-                        <th className="sort-by" onClick={() => sortByPrice("gameVision")}>Game Vision <i className="fas fa-sort-down"></i></th>
-                        <th className="sort-by" onClick={() => sortByPrice("attack")}>Attack <i className="fas fa-sort-down"></i></th>
-                        <th>Position</th>
-                        <th className="sort-by" onClick={() => sortByPrice("price")}>Price<i className="fas fa-money-bill money-icon"></i><i className="fas fa-sort-down"></i></th>
+                        <th className="sort-by" onClick={() => sortBy("name")}>Name <i className="fas fa-sort-down"></i></th>
+                        <th className="sort-by" onClick={() => sortBy("defense")}>Defense <i className="fas fa-sort-down"></i></th>
+                        <th className="sort-by" onClick={() => sortBy("gameVision")}>Game Vision <i className="fas fa-sort-down"></i></th>
+                        <th className="sort-by" onClick={() => sortBy("attack")}>Attack <i className="fas fa-sort-down"></i></th>
+                        <th>GK</th>
+                        <th className="sort-by" onClick={() => sortBy("position")}>Position <i className="fas fa-sort-down"></i></th>
+                        <th className="sort-by" onClick={() => sortBy("price")}>Price<i className="fas fa-money-bill money-icon"></i><i className="fas fa-sort-down"></i></th>
                         <th>nationality</th>
                         <th>image</th>
                         <th></th>

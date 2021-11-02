@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import {  Link } from 'react-router-dom';
 import { postUser, postTeam } from '../../api';
+import { Redirect } from 'react-router';
 export default function SignupForm({ users, addUser }) {
 	const [input, setInput] = useState({
 		name: "",
@@ -8,9 +9,10 @@ export default function SignupForm({ users, addUser }) {
 		password: "",
 		confirmPassword: "",
 		teamName: ""
-	})
-	const [message, setMessage] = useState("")
-	const [disableInput, setDisableInput] = useState(false)
+	});
+	const [message, setMessage] = useState("");
+	const [disableInput, setDisableInput] = useState(false);
+	const [redirect,setRedirect]=useState(false)
 
 	const handelInputChange = (e) => {
 		const temp = { ...input }
@@ -18,7 +20,6 @@ export default function SignupForm({ users, addUser }) {
 		setInput(temp)
 		setMessage("")
 	}
-	let history = useHistory()
 	const handelSignUp = async () => {
 		if (!input.name || !input.password || !input.username || !input.confirmPassword) {
 			setMessage("Please fill in all the fields")
@@ -208,9 +209,10 @@ export default function SignupForm({ users, addUser }) {
 		await postTeam(temp.id, obj)
 		addUser([...users, temp])
 		setDisableInput(false)
-		history.push("/")
+		setRedirect(false)
 	}
-
+	if(redirect)
+		return <Redirect to="/"/>
 	return (
 		<div className="login-card-form register-form">
 
