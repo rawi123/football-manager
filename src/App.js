@@ -43,7 +43,8 @@ function App() {
   }
 
 
-  const updateBuy = (user,team,formation) => {//name update buy but it is  update after sell or buy update user team and formation
+  const update = (user,team,formation) => {//name update buy but it is  update after sell or buy update user team and formation
+    //in addition just updates user team formation
     setLoggedUser(user);
     setTeam(team);
     setFormation(formation);
@@ -68,13 +69,13 @@ function App() {
             <Home players={players} ></Home>
           </Route>
           <Route exact path="/shop">
-            <Shop formation={formation} userTeam={team} userProp={loggedUser} players={players} updateUserFather={updateBuy} />
+            <Shop formation={formation} userTeam={team} userProp={loggedUser} players={players} updateUserFather={update} />
           </Route>
           <Route exact path="/preview">
-            <PreView user={loggedUser} updateBuy={updateBuy} setFormation={setFormation} team={team} formation={formation}/>
+            <PreView user={loggedUser} updateBuy={update} setFormation={setFormation} team={team} formation={formation}/>
           </Route>
           <Route exact path="/train">
-            <Train user={loggedUser}  formationProp={formation} team={team}/>
+            <Train user={loggedUser} handelUpgradeCB={update}  formationProp={formation} team={team}/>
           </Route>
         </Switch>
       </BrowserRouter>
