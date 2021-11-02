@@ -12,13 +12,13 @@ export default function MakePlayer() {
     })
     const [message, setMessage] = useState("refresh to update data")
 
-    const handelChange = (e) => {
+    const handelChange = (e) => {//controlled input
         const temp = { ...input }
         temp[e.target.name] = e.target.value
         setInput(temp)
     }
 
-    const handelSignIn = async (e) => {
+    const handelSignIn = async (e) => {//handell adding player- set in api 
         e.preventDefault();
         const obj = {
             name: input.name.trim(),
@@ -43,7 +43,7 @@ export default function MakePlayer() {
         console.log(temp.data);
         setMessage("success")
     }
-    const handelSync=async ()=>{
+    const handelSync=async ()=>{//set player image as his id number
         (await getPlayers()).data.slice(70)
         .map(async val=>{
             await putPlyaerImage(val)
@@ -62,7 +62,7 @@ export default function MakePlayer() {
                 <input type="text" name="price" placeholder="price" value={input.price} onChange={handelChange} />
 
             </form>
-            <input className="submit" type="submit" value="Login" onClick={handelSignIn} style={{background:"white"}}/>
+            <input className="submit" type="submit" value="ADD PLAYER" onClick={handelSignIn} style={{background:"white"}}/>
             <input className="submit" type="submit" value="SYNC" onClick={handelSync} style={{background:"white"}}/>
             <h2>{message}</h2>
         </div>

@@ -14,13 +14,13 @@ import Train from "./components/train/Train";
 
 
 function App() {
-  const [loggedUser, setLoggedUser] = useState(JSON.parse(sessionStorage.getItem("user")) || {});
-  const [users, setUsers] = useState([])
-  const [players, setPlayers] = useState([])
-  const [team, setTeam] = useState([])
-  const [formation,setFormation]=useState([])
+  const [loggedUser, setLoggedUser] = useState(JSON.parse(sessionStorage.getItem("user")) || {});//logged user
+  const [users, setUsers] = useState([])//all users
+  const [players, setPlayers] = useState([])//all avilable players
+  const [team, setTeam] = useState([])//player team
+  const [formation,setFormation]=useState([])//user team
 
-  useEffect(() => {
+  useEffect(() => {//on mount fetch data and set in states
     (async function () {
       setUsers((await getUsers()).data)
       setPlayers((await getPlayers()).data)
@@ -33,7 +33,7 @@ function App() {
   }, [])
 
 
-  const handelSignIn = async (user) => {
+  const handelSignIn = async (user) => {//sign in user 
     setLoggedUser(user)
     sessionStorage.setItem("user", JSON.stringify(user))
     const team = (await getTeam(user.id)).data[0]
@@ -42,7 +42,7 @@ function App() {
   }
 
 
-  const updateBuy = (user,team,formation) => {
+  const updateBuy = (user,team,formation) => {//name update buy but it is  update after sell or buy update user team and formation
     setLoggedUser(user);
     setTeam(team);
     setFormation(formation);

@@ -8,7 +8,7 @@ export default function LoginForm({ user,users, setLoggedUserCB }) {
     })
     const [message, setMessage] = useState("")
 
-    const handelChange = (e) => {
+    const handelChange = (e) => {//controlled input
         const temp = { ...input }
         temp[e.target.name] = e.target.value
         setInput(temp)
@@ -16,7 +16,7 @@ export default function LoginForm({ user,users, setLoggedUserCB }) {
 
     let history = useHistory()
 
-    const handelSignIn = () => {
+    const handelSignIn = () => {//handel sign in
         const temp = users.find(({ username, password }) => username === input.username && password === input.password);
         if (temp) {
             setLoggedUserCB(temp);
@@ -24,7 +24,7 @@ export default function LoginForm({ user,users, setLoggedUserCB }) {
         } else setMessage('Wrong username/password');
     }
 
-    if (Object.keys(user).length!==0){
+    if (Object.keys(user).length!==0){//if alreday logged in send to home page
         history.push("/")
         return <React.Fragment/>
     }

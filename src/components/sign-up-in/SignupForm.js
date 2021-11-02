@@ -14,13 +14,14 @@ export default function SignupForm({ users, addUser }) {
 	const [disableInput, setDisableInput] = useState(false);
 	const [redirect,setRedirect]=useState(false)
 
-	const handelInputChange = (e) => {
+	const handelInputChange = (e) => {//controlled input
 		const temp = { ...input }
 		temp[e.target.name] = e.target.value
 		setInput(temp)
 		setMessage("")
 	}
-	const handelSignUp = async () => {
+
+	const handelSignUp = async () => {//check for avilable fields and create account 
 		if (!input.name || !input.password || !input.username || !input.confirmPassword) {
 			setMessage("Please fill in all the fields")
 			return
