@@ -5,10 +5,9 @@ import { Spinner } from "react-bootstrap"
 import { putUser, putUserTeam } from '../../api'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
 import "./style.css"
 import PlayerCard from './PlayerCard'
+
 export default function PreView({ user, team, formation, setFormation, updateBuy }) {
     const [teamLite, setTeamLite] = useState([])//stright array for all players to use - lite
     const [teamFormation, setTeamFormation] = useState({})//team formation
@@ -70,6 +69,9 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
 
     const handelClick = (player, position) => {//click on div if there is no player save his data and give him animation
         //if clicking on empty then set as empty  - the player object will be empty and if he is the second dont do anything
+        if(!enableSell){
+            return
+        }
         if (saved.id) {
             if (player.id) {
                 const formationTemp = { ...teamFormation }
