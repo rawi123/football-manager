@@ -103,7 +103,10 @@ export default function Train({ team, user, handelUpgradeCB, formationProp }) {
                     }) : null
                 }
             </div>
+            <div>
             <button onClick={handelSave}>Purchase</button>
+            <button onClick={handelSave}>Purchase</button>
+            </div>
         </div>
     )
 }
