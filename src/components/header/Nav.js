@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 import "./style.css"
+import Sound from './Sound'
 export default function NavBar({ user, setLoggedUser }) {
     let history = useHistory()
     const handelClick = () => {
@@ -26,6 +27,7 @@ export default function NavBar({ user, setLoggedUser }) {
                         <Nav.Link onClick={() => sendTo("/shop")}>Shop</Nav.Link>
                     </Nav>
                     <Nav>
+                        <Navbar.Text><Sound/></Navbar.Text>
                         {Object.keys(user).length !== 0 ? <Navbar.Text >{user.money}<i className="fas fa-money-bill money-icon"></i></Navbar.Text> : null}
                         {Object.keys(user).length === 0 ? <Nav.Link onClick={() => sendTo("/login")}>Log In</Nav.Link> : <Nav.Link onClick={handelClick}>Log Out</Nav.Link>}
                         {Object.keys(user).length !== 0 && user.isAdmin ? <Nav.Link onClick={() => sendTo("/admin-make-player")}>make player</Nav.Link> : null}

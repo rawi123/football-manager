@@ -71,14 +71,17 @@ export default function Train({ team, user, handelUpgradeCB, formationProp }) {
     const handelSave = async () => {//update api and parent after clicking save
         notifyWait("Pending...")
         try {
-            setEnable(false)
+            setEnable(false);
+            const num=Math.floor(Math.random()*500)
             const userTemp = { ...user }
             userTemp.money = userTemp.money - money;
+            if(num===250){userTemp.money = userTemp.money +10000;};
             await putUser(user.id, { "money": userTemp.money })
             await putUserTeam(user.id, { "team": teamState })
             handelUpgradeCB(userTemp, teamState, formationProp);
             setMoney(0)
             notify("Update Successfull")
+            if(num===500){notify("Congrats you just won 10k coins!");};
         }
         catch {
             notifyFail()
