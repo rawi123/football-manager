@@ -43,6 +43,7 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
     useEffect(()=>{
         if (!Array.isArray(teamFormation)&&!Array.isArray(team))
             setRating(calculateTeamRating(team, teamFormation))
+        //eslint-disable-next-line
     },[teamFormation])
 
     const notify = (name) => toast.success(name, {
