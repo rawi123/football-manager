@@ -109,3 +109,12 @@
 		height: 90px;
 	}
 }
+@media (max-width:1050px) {
+	.content-container{
+        flex-direction: column;
+    }
+    .content-container button{
+        position: unset;
+    }
+	
+}

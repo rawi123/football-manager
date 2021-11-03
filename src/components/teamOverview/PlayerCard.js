@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Button } from 'react-bootstrap'
-export default function PlayerCard({ player,sellPlayer,enableSell }) {
+export default function PlayerCard({noSell, player,sellPlayer,enableSell }) {
     if(!player.id){
         return <></>
     }
@@ -25,7 +25,8 @@ export default function PlayerCard({ player,sellPlayer,enableSell }) {
                         </Card.Text>
                     </React.Fragment>
                 }
-            <Button variant="primary" onClick={()=>enableSell?sellPlayer(player):null}>Sell-{(80/100)*parseInt(player.price)}</Button>
+            {!noSell?<Button variant="primary" onClick={()=>enableSell?sellPlayer(player):null}>Sell-{(80/100)*parseInt(player.price)}</Button>:null}
+            
             </Card.Body>
             <Card.Footer className="">{player.position}</Card.Footer>
         </Card>

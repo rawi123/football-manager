@@ -25,6 +25,7 @@ export default function NavBar({ user, setLoggedUser }) {
                             <NavDropdown.Item onClick={() => sendTo("/train")}>Train</NavDropdown.Item>
                         </NavDropdown>
                         <Nav.Link onClick={() => sendTo("/shop")}>Shop</Nav.Link>
+                        <Nav.Link onClick={() => sendTo("/game")}>Game</Nav.Link>
                     </Nav>
                     <Nav>
                         <Navbar.Text><Sound/></Navbar.Text>

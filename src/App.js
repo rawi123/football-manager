@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.css"
 import Shop from "./components/shop/Shop";
 import PreView from "./components/teamOverview/PreView";
 import Train from "./components/train/Train";
+import Game from "./components/game/Game";
 
 
 function App() {
@@ -51,6 +52,12 @@ function App() {
     sessionStorage.setItem("user", JSON.stringify(user));
   }
 
+  const updateUser=(user)=>{//update the user
+    setLoggedUser(user);
+    sessionStorage.setItem("user", JSON.stringify(user));
+
+  }
+
   return (
     <div className="content-container">
       <BrowserRouter>
@@ -76,6 +83,9 @@ function App() {
           </Route>
           <Route exact path="/train">
             <Train user={loggedUser} handelUpgradeCB={update}  formationProp={formation} team={team}/>
+          </Route>
+          <Route exact path="/game">
+            <Game user={loggedUser} players={players} updateUser={updateUser}  formationProp={formation} team={team}/>
           </Route>
         </Switch>
       </BrowserRouter>

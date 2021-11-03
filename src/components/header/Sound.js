@@ -4,6 +4,7 @@ import sound2 from "../../soundtrack/sound2.mp3"
 import sound3 from "../../soundtrack/sound3.mp3"
 export default function Sound() {
     const [play, setPlay] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const [soundPlaying,setSoundPlaying]=useState(0)
 
     useEffect(()=>{
@@ -14,14 +15,14 @@ export default function Sound() {
             setSoundPlaying(audio);
             audio.volume=0.3;
             audio.play();
-            audio.addEventListener("ended",setPlay(true));
+            audio.addEventListener("ended",()=>{setRefresh(!refresh);});
         }
         else{
             if(soundPlaying)
                soundPlaying.pause()
         }
         //eslint-disable-next-line
-    },[play])
+    },[play,refresh])
 
     return (< >
         {play ? <i onClick={() => {  setPlay(!play) }} className="fas fa-volume-up" style={{ color: "rgba(255, 255, 255, 0.65)", marginRight: ".3rem" }}></i>

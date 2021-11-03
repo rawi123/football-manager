@@ -45,7 +45,7 @@ export default function SignupForm({ users, addUser }) {
 		setDisableInput(true)
 		const userObj = {
 			name: input.name,
-			money: 100000,
+			money: 150000,
 			password: input.password,
 			username: input.username,
 			teamName: input.teamName
