@@ -38,8 +38,8 @@ export default function SignupForm({ users, addUser }) {
 			setMessage("Passwords must have at least a number")
 			return
 		}
-		if (!/^[a-zA-Z]/.match(input.teamName)
-			||/[1-9]/g.match(input.teamName)) {
+		if (!/^[a-zA-Z]/g.test(input.teamName)
+			||/[1-9]/g.test(input.teamName)) {
 			setMessage("team name should start with a letter and can't contain numbers")
 			return
 		}
@@ -50,7 +50,9 @@ export default function SignupForm({ users, addUser }) {
 		setDisableInput(true)
 		const userObj = {
 			name: input.name,
-			money: 150000,
+			money: 100000,
+			energy:100,
+			gamesDate:[],
 			password: input.password,
 			username: input.username,
 			teamName: input.teamName
@@ -215,7 +217,7 @@ export default function SignupForm({ users, addUser }) {
 		await postTeam(temp.id, obj)
 		addUser([...users, temp])
 		setDisableInput(false)
-		setRedirect(false)
+		setRedirect(true)
 	}
 	if (redirect)
 		return <Redirect to="/" />

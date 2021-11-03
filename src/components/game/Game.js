@@ -12,7 +12,7 @@ import PlayersPreView from './PlayersPreView'
 import { putUser } from '../../api'
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function Game({ user, team, formationProp, setUserCB, players }) {
+export default function Game({ user, team, formationProp,updateUserCB, players }) {
     const [enable, setEnable] = useState(false);
     const [rivalTeam, setRivalTeam] = useState("");
     const [savedPlayer, setSavedPlayer] = useState("");
@@ -57,7 +57,6 @@ export default function Game({ user, team, formationProp, setUserCB, players }) 
         return <Redirect to="/login" />
     }
 
-
     const generateTeam = () => {
         if (!enable || genLeft === 4)
             return
@@ -72,7 +71,7 @@ export default function Game({ user, team, formationProp, setUserCB, players }) 
         setRivalRating(calculateTeamRating(rivalTeam.team, rivalTeam.formation))
     }
 
-    const notifyFail = () => toast.error("Error money not added", {
+    const notifyFail = (text) => toast.error(text, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -85,6 +84,10 @@ export default function Game({ user, team, formationProp, setUserCB, players }) 
     const playGame = () => {
         if (!enable)
             return
+        if(user.energy<=0){
+            notifyFail("not enough energy!")
+            return
+        }
         const num = 10000,
             teamRating = calculateTeamRating(team, formationProp)
         let interval1Time = Math.floor((Math.random() * (num - 1500)) + 1500),
@@ -109,26 +112,26 @@ export default function Game({ user, team, formationProp, setUserCB, players }) 
             }
             gameScore = { ...newScore }
             interval1Time = Math.floor((Math.random() * (num - 1500)) + 1500);
-            setScore({ ...newScore })
+            setScore({ ...newScore });
             setGoalClass("fullBall")
             setTimeout(() => {
-                setGoalClass("hidden")
+                setGoalClass("hidden");
             }, 1000);
         }, interval1Time);
         setTimeout(() => {
-            gameEnd(goalScorrer, gameScore)
+            gameEnd(goalScorrer, gameScore);
         }, num);
     }
     const gameEnd = (goalScorrer, gameScore) => {
-        setRivalTeam("")
-        setGamePlaying("result")
+        setRivalTeam("");
+        setGamePlaying("result");
         clearInterval(goalScorrer);
-        setGoalClass("no-goal")
-        setRivalRating(0)
-        updateUserInfo(gameScore)
+        setGoalClass("no-goal");
+        setRivalRating(0);
+        updateUserInfo(gameScore);
     }
-    const updateUserInfo = async(gameScore) => {
-        try{
+    const updateUserInfo = async (gameScore) => {
+        try {
             let money = 0;
             if (gameScore.team > gameScore.rival) {
                 money = 8000;
@@ -139,14 +142,20 @@ export default function Game({ user, team, formationProp, setUserCB, players }) 
             else {
                 money = 1000;
             }
-            const userTemp = { ...user }
-            userTemp["money"] = userTemp.money + money
-            setUserCB(userTemp)
-            await putUser(user.id,{ "money": user.money + money })
+            const userTemp = { ...user };
+            userTemp["money"] = userTemp.money + money;
+            userTemp["energy"] -= 10;
+            userTemp["gamesDate"].push(new Date())
+            updateUserCB(userTemp);
+            await putUser(user.id, {
+                "money": user.money + money,
+                energy:userTemp["energy"],
+                gamesDate:userTemp["gamesDate"]
+            });
         }
-        catch{
-            notifyFail()
-            setUserCB(user)
+        catch {
+            notifyFail("Error money not added")
+            updateUserCB(user)
         }
     }
 
@@ -160,7 +169,7 @@ export default function Game({ user, team, formationProp, setUserCB, players }) 
         return (<>
             <ToastContainer />
             <FinalResults enable={enable} setGamePlaying={setGamePlaying} setScore={setScore} generateTeam={generateTeam} user={user} score={score} />
-            </>
+        </>
         )
     }
     return (

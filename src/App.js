@@ -3,7 +3,7 @@ import LoginForm from "./components/sign-up-in/LoginForm";
 import SignupForm from "./components/sign-up-in/SignupForm";
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import React, { useState, useEffect } from 'react';
-import { getUsers, getPlayers, getTeam } from "./api"
+import { getUsers, getPlayers, getTeam,putUser } from "./api"
 import MakePlayer from "./components/admin/MakePlayer";
 import Home from "./components/home/Home";
 import NavBar from "./components/header/Nav";
@@ -36,9 +36,20 @@ function App() {
 
 
   const handelSignIn = async (user) => {//sign in user 
-    setLoggedUser(user)
-    sessionStorage.setItem("user", JSON.stringify(user))
-    const team = (await getTeam(user.id)).data[0]
+    const userTemp={...user}
+    user.gamesDate.map(val=>{
+      if(parseInt((new Date()-new Date(val))/1000/60/60)>=3){
+        userTemp.gamesDate.splice(userTemp.gamesDate.indexOf(val),1);
+        userTemp["energy"]+=10;
+      };
+      return 1;
+    })
+    if(user.energy!==userTemp.energy){
+      await putUser(userTemp.id,userTemp)
+    }
+    setLoggedUser(userTemp)
+    sessionStorage.setItem("user", JSON.stringify(userTemp))
+    const team = (await getTeam(userTemp.id)).data[0]
     setTeam(team.team)
     setFormation(team.formation)
   }
@@ -84,7 +95,7 @@ function App() {
             <Train user={loggedUser} handelUpgradeCB={update}  formationProp={formation} team={team}/>
           </Route>
           <Route exact path="/game">
-            <Game setUserCB={setLoggedUser} user={loggedUser} players={players} updateUser={updateUser}  formationProp={formation} team={team}/>
+            <Game user={loggedUser} players={players} updateUserCB={updateUser}  formationProp={formation} team={team}/>
           </Route>
         </Switch>
       </BrowserRouter>

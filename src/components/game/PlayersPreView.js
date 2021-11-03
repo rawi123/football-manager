@@ -1,6 +1,6 @@
 import React from 'react'
 import PlayerCard from '../teamOverview/PlayerCard'
-export default function PlayersPreView({rivalTeam,savedPlayer,setSavedPlayer}) {
+export default function PlayersPreView({setPlayerNum,rivalTeam,savedPlayer,setSavedPlayer}) {
     const returnPlayers = () => {//return array of players as divs and add handlers 
         let temp = [],
             arr = [],

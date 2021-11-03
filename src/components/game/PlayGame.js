@@ -104,15 +104,14 @@ export const calculateTeamRating = (team, formation) => {
             }
         });
     }
-    rating = parseFloat((rating / 11).toFixed(2));
+    rating = rating / 11;
     rating += calcNations(nations);
-    return rating
+    return parseFloat((rating).toFixed(2))
 }
 
 const calcNations = (nations) => {
     let ratingToAdd = 0;
     for (const playerNum in nations) {
-        console.log(nations[playerNum]);
         if (nations[playerNum] < 3) { }
 
         else if (nations[playerNum] >= 3 && nations[playerNum] <= 5) { ratingToAdd += 2; }

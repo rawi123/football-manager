@@ -39,6 +39,9 @@
     cursor: pointer;
 
 }
+.margin-1{
+    margin-right: .3rem ;
+}
 .table-container{
     width: 90vw;
     margin: 0 auto;
@@ -58,6 +61,13 @@
 }
 .sort-by{
     cursor: pointer;
+}
+.flex-nav{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem ;
+    margin-right: .2rem !important;
 }
 .error-message{
     display: flex;

@@ -28,7 +28,10 @@ export default function NavBar({ user, setLoggedUser }) {
                         <Nav.Link onClick={() => sendTo("/game")}>Game</Nav.Link>
                     </Nav>
                     <Nav>
-                        <Navbar.Text><Sound/></Navbar.Text>
+                        <Navbar.Text><Sound /></Navbar.Text>
+                        {Object.keys(user).length !== 0 ? <Navbar.Text ><div className="flex-nav row">
+                            {user.energy}<i className="fas fa-battery-full"></i>
+                        </div></Navbar.Text> : null}
                         {Object.keys(user).length !== 0 ? <Navbar.Text >{user.money}<i className="fas fa-money-bill money-icon"></i></Navbar.Text> : null}
                         {Object.keys(user).length === 0 ? <Nav.Link onClick={() => sendTo("/login")}>Log In</Nav.Link> : <Nav.Link onClick={handelClick}>Log Out</Nav.Link>}
                         {Object.keys(user).length !== 0 && user.isAdmin ? <Nav.Link onClick={() => sendTo("/admin-make-player")}>make player</Nav.Link> : null}
