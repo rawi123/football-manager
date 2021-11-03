@@ -37,7 +37,6 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
         setTeamLite(teamLite)
         setTeamFormation(formation)
         setTeamFormationCopy({ ...formation })
-        console.log(teamFormation,"teamform");
         //eslint-disable-next-line
     }, [user, formation])
     useEffect(()=>{

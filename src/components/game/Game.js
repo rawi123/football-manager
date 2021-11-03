@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
-import { playGameFunc, calculateTeamRating } from './PlayGame'
+import { playGameFunc, calculateTeamRating, playFinalGame } from './PlayGame'
 import PlayerCard from '../teamOverview/PlayerCard'
 import "./style.css"
 import stadium from "../../img/stadium2.jpg"
 import football from "../../img/football.png"
+import goal from "../../img/goal.png"
 import logo from "../../img/logo2.png"
 import Result from './Result'
 export default function Game({ user, team, formationProp, handelUpdate, players }) {
@@ -14,11 +15,16 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
     const [genLeft, setGenLeft] = useState(1);
     const [rivalRating, setRivalRating] = useState(0);
     const [gamePlaying, setGamePlaying] = useState("");
+    const [interv, setInterv] = useState(0)
+    const [score, setScore] = useState({
+        rival: 0,
+        team: 0
+    })
     const [leftTop, setLeftTop] = useState({
         top: "40.5%",
         left: "46.5%"
     })
-    const [interv, setInterv] = useState(0)
+    const [goalClass, setGoalClass] = useState("no-ball")
     useEffect(() => {
         if (players.length)
             setEnable(true)
@@ -84,19 +90,47 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
     const playGame = () => {
         if (!enable)
             return
+        const num = 10000;
         const teamRating = calculateTeamRating(team, formationProp)
         setGamePlaying("playing")
         setRivalRating(0)
         setGenLeft(1)
+        const goalScorrer = setInterval(() => {
+            const newScore=playFinalGame(teamRating, rivalRating, score.team, score.rival);
+            setScore(newScore)
+            if(score.rival===newScore.rival){
+                setLeftTop({
+                    top: "40.5%",
+                    left: "0"
+                })
+            }
+            else{
+                setLeftTop({
+                    top: "40.5%",
+                    left: "93%"
+                })
+            }
+            setGoalClass("fullBall")
+            setTimeout(() => {
+                setGoalClass("hidden")
+            }, 1000);
+
+        }, Math.floor(Math.random() * num));
         setTimeout(() => {
             setRivalTeam("")
             setGamePlaying("result")
-        }, 1000);
+            clearInterval(goalScorrer);
+            setGoalClass("no-ball")
+        }, num);
+
     }
+    console.log(goalClass);
     if (gamePlaying === "playing") {
         return (
-            <div className="flex center">
+            <div className="pitch-result">
+                <Result myTeam={user.teamName} myScore={score.team} rivalScore={score.rival} />
                 <div className="pitch" style={{ background: `url(${stadium})no-repeat center center/cover` }}>
+                    <img src={goal} alt="goal" className={goalClass} />
                     <img alt="ball" src={football} className="football" style={{ left: leftTop.left, top: leftTop.top }}></img>
                 </div>
             </div>
@@ -104,17 +138,21 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
     }
     else if (gamePlaying === "result") {
         return (
-            <div className="result-container">
-                <Result myTeam={user.teamName} myScore="" rivalScore="" />
+            <div className="result-container pitch-result">
+                <Result myTeam={user.teamName} myScore={score.team} rivalScore={score.rival} />
                 <button className={`game-btn result-btn `} onClick={() => enable ? (function () {
                     setGamePlaying("");
+                    setScore({ team: 0, rival: 0 })
                     generateTeam();
                 }()) : null}>Generate rival team</button>
             </div>
         )
     }
     return (
+
         <div className="game-container">
+            {console.log(score)}
+
             {rivalTeam ?
                 <div className="preview-container">
                     <div className="preview-background">

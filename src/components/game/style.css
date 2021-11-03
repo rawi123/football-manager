@@ -29,6 +29,17 @@
 	align-items: center;
 	justify-content: center;
 }
+.pitch-result {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.results {
+	color: white;
+	font-size: 2rem;
+	margin: 1rem;
+}
 .result-container {
 	height: 70vh;
 	display: flex;
@@ -37,6 +48,32 @@
 }
 .result-container > * {
 	align-self: center;
+}
+.no-ball{
+    width: 0;
+    height: 0;
+}
+.fullBall{
+    animation: ballFadeIn 1s ease forwards;
+}
+.hidden {
+	animation: ballFadeOut 1s ease forwards;
+}
+@keyframes ballFadeIn {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+@keyframes ballFadeOut {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
 }
 .pitch {
 	position: relative;

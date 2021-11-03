@@ -3,7 +3,6 @@
 export function playGameFunc(teamProp, formationProp, players) {
     const playersAtPositions = returnTeamFiltered(players)
     const rivalteam = generateRivalTeam(playersAtPositions)
-    console.log(rivalteam);
     return rivalteam;
 }
 
@@ -84,7 +83,6 @@ const generateRivalTeam = (playersAtPositions) => {
 
 }
 
-
 export const calculateTeamRating = (team, formation) => {
     let rating = 0;
     for (const position in team) {
@@ -143,8 +141,8 @@ const calculatePlayerRating = (player, pos, formation) => {//if player in the ri
         rating = parseFloat((calc + calc * 0.05).toFixed(2));
     }
     else {
-        if(pos==="GK"){
-            rating=parseFloat((calc - calc * 0.35).toFixed(2))
+        if (pos === "GK") {
+            rating = parseFloat((calc - calc * 0.35).toFixed(2))
         }
         else if (pos === "back") {
             if (returnIfInPosition(formation, player, "RB", "CB1", "CB2", "LB")) {
@@ -173,4 +171,38 @@ const returnIfInPosition = (formation, player, pos1, pos2, pos3, pos4 = false) =
         return true
     }
     return false
+}
+
+export const playFinalGame = (rating, rivalRating, teamScoreProp, rivalScoreProp) => {
+    let teamScore = teamScoreProp;
+    let rivalScore = rivalScoreProp;
+    // const num = Math.floor(Math.random() * gameTime + 1)
+    if (rivalRating > rating) {
+        if (calcGoal(rivalRating, rating) === "max") {
+            rivalScore++;
+        }
+        else {
+            teamScore++;
+        }
+    }
+    else {
+        if (calcGoal(rivalRating, rating)) {
+            if (calcGoal(rivalRating, rating) === "max") {
+                teamScore++;
+            }
+            else {
+                rivalScore++;
+            }
+        }
+    }
+    return ({ team:teamScore, rival:rivalScore })
+}
+const calcGoal = (maxScore, minScore) => {
+    let difference = parseFloat((maxScore - minScore).toFixed(2)) - minScore * 0.4;
+    const max = Math.floor(Math.random() * (maxScore - difference) + difference);
+    const min = Math.floor(Math.random() * (minScore - minScore * 0.1));
+    if (max > min) {
+        return "max"
+    }
+    else return "min"
 }
