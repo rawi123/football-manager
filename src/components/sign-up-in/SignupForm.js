@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { postUser, postTeam } from '../../api';
 import { Redirect } from 'react-router';
 export default function SignupForm({ users, addUser }) {
@@ -12,7 +12,7 @@ export default function SignupForm({ users, addUser }) {
 	});
 	const [message, setMessage] = useState("");
 	const [disableInput, setDisableInput] = useState(false);
-	const [redirect,setRedirect]=useState(false)
+	const [redirect, setRedirect] = useState(false)
 
 	const handelInputChange = (e) => {//controlled input
 		const temp = { ...input }
@@ -36,6 +36,11 @@ export default function SignupForm({ users, addUser }) {
 		}
 		if (!/[1-9]/g.test(input.password)) {
 			setMessage("Passwords must have at least a number")
+			return
+		}
+		if (!/^[a-zA-Z]/.match(input.teamName)
+			||/[1-9]/g.match(input.teamName)) {
+			setMessage("team name should start with a letter and can't contain numbers")
 			return
 		}
 		if (users.some(({ username }) => input.username === username)) {
@@ -212,8 +217,8 @@ export default function SignupForm({ users, addUser }) {
 		setDisableInput(false)
 		setRedirect(false)
 	}
-	if(redirect)
-		return <Redirect to="/"/>
+	if (redirect)
+		return <Redirect to="/" />
 	return (
 		<div className="login-card-form register-form">
 

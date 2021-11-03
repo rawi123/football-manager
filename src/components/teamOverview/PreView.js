@@ -4,6 +4,7 @@ import { putFormation } from '../../api'
 import { Spinner } from "react-bootstrap"
 import { putUser, putUserTeam } from '../../api'
 import { toast, ToastContainer } from 'react-toastify';
+import { calculateTeamRating } from '../game/PlayGame'
 import 'react-toastify/dist/ReactToastify.css';
 import "./style.css"
 import PlayerCard from './PlayerCard'
@@ -16,6 +17,7 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
     const [transform, setTransform] = useState("")//only for clicking on player - animation
     const [enable, setEnable] = useState(false)//enable for save and reset
     const [enableSell, setEnableSell] = useState(true)//enable sell players so not making alot of request at once only after each request finishes
+    const [rating, setRating] = useState(0)
     const [saved, setSaved] = useState({//on player click save this data
         id: "",
         img: "",
@@ -35,8 +37,13 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
         setTeamLite(teamLite)
         setTeamFormation(formation)
         setTeamFormationCopy({ ...formation })
+        console.log(teamFormation,"teamform");
         //eslint-disable-next-line
     }, [user, formation])
+    useEffect(()=>{
+        if (!Array.isArray(teamFormation)&&!Array.isArray(team))
+            setRating(calculateTeamRating(team, teamFormation))
+    },[teamFormation])
 
     const notify = (name) => toast.success(name, {
         position: "top-right",
@@ -72,7 +79,7 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
 
     const handelClick = (player, position) => {//click on div if there is no player save his data and give him animation
         //if clicking on empty then set as empty  - the player object will be empty and if he is the second dont do anything
-        if(!enableSell){
+        if (!enableSell) {
             return
         }
         if (saved.id) {
@@ -183,8 +190,15 @@ export default function PreView({ user, team, formation, setFormation, updateBuy
                 {!enable ? <Spinner className="loader-pre-view" variant="primary" animation="border" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </Spinner> : null}
-                <button className="save-formation" color="primary" onClick={() => enable ? handelSave() : null}>Save</button>
-                <button className="reset-formation" color="primary" onClick={() => enable ? handelCopy() : null}>reset</button>
+            </div>
+            <div className="game-left pre-view-right">
+                <h3>{user.teamName}</h3>
+                <p className="">rating: {rating}</p>
+                <div className="flex">{Array.from({ length: rating / 20 }).map((val,i) => <h4 key={i}>⭐</h4>)}</div>
+                <div className="flex-column">
+                    <button className="save-formation" color="primary" onClick={() => enable ? handelSave() : null}>Save</button>
+                    <button className="reset-formation" color="primary" onClick={() => enable ? handelCopy() : null}>reset</button>
+                </div>
             </div>
             {saved.player ? <PlayerCard player={saved.player} enableSell={enableSell} sellPlayer={sellPlayer} /> : null}
 

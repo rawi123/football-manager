@@ -1,25 +1,38 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
-import { playGameFunc } from './PlayGame'
+import { playGameFunc, calculateTeamRating } from './PlayGame'
 import PlayerCard from '../teamOverview/PlayerCard'
 import "./style.css"
 import logo from "../../img/logo2.png"
 export default function Game({ user, team, formationProp, handelUpdate, players }) {
-    const [enable, setEnable] = useState(true)
+    const [enable, setEnable] = useState(false)
     const [rivalTeam, setRivalTeam] = useState("")
     const [savedPlayer, setSavedPlayer] = useState("")
-    const [genLeft,setGenLeft]=useState(1)
+    const [genLeft, setGenLeft] = useState(1)
+    const [rating, setRating] = useState(0)
+
+    useEffect(() => {
+        if (players.length)
+            setEnable(true)
+    }, [players])
+
     if (Object.keys(user).length === 0) {
         return <Redirect to="/login" />
     }
 
+
     const generateTeam = () => {
-        if (!enable || genLeft===4)
+        if (!enable || genLeft === 4)
             return
+        setEnable(false)
+        setTimeout(() => {
+            setEnable(true)
+        }, 800);
         const rivalTeam = playGameFunc(team, formationProp, players)
         setRivalTeam(rivalTeam);
         setSavedPlayer("")
-        setGenLeft(genLeft+1)
+        setGenLeft(genLeft + 1)
+        setRating(calculateTeamRating(rivalTeam.team, rivalTeam.formation))
     }
     const returnPlayers = () => {//return array of players as divs and add handlers 
         let temp = [],
@@ -44,7 +57,12 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
     }
 
     const playGame = () => {
-        console.log("play game");
+        if (!enable)
+            return
+        const team1rating = calculateTeamRating(rivalTeam.team, rivalTeam.formation)
+        const team2rating = calculateTeamRating(team, formationProp)
+        console.log(team1rating);
+        console.log(team2rating);
     }
 
     return (
@@ -61,14 +79,14 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
 
             <div className={`game-left ${rivalTeam ? "play-game-active" : "row"}`}>
                 {rivalTeam ? <>
-                    <p>Generate left: {4-genLeft}</p>
+                    <p>Generate left: {4 - genLeft}</p>
+                    {rating?<p>rating: {rating}</p>:null}
+                    <div className="flex">{Array.from({ length: rating / 20 }).map((val, i) => <h4 key={i}>⭐</h4>)}</div>
                     <button className={`game-btn`} onClick={() => enable ? playGame() : null}>
                         play-game
-                    </button> </> : <img src={logo} style={{ width: "18vw", height: "24vh", marginTop: "2vw", marginBottom: "2vw" }} alt="my-logo" />}
+                    </button> </> : <img src={logo} style={{ width: "20rem", height: "14rem", marginTop: "2vw", marginBottom: "2vw" }} alt="my-logo" />}
                 <button className={`game-btn `} onClick={() => enable ? generateTeam() : null}>Generate rival team</button>
-
             </div>
-
         </div>
     )
 }
