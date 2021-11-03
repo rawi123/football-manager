@@ -13,7 +13,6 @@ import PreView from "./components/teamOverview/PreView";
 import Train from "./components/train/Train";
 import Game from "./components/game/Game";
 
-
 function App() {
   const [loggedUser, setLoggedUser] = useState(JSON.parse(sessionStorage.getItem("user")) || {});//logged user
   const [users, setUsers] = useState([])//all users
