@@ -85,9 +85,11 @@ const generateRivalTeam = (playersAtPositions) => {
 
 export const calculateTeamRating = (team, formation) => {
     let rating = 0;
+    const nations = {};
     for (const position in team) {
         //eslint-disable-next-line
         team[position].map(player => {
+            nations[player.nationality] = nations[player.nationality] + 1 || 1
             if (player.position === "CB" || player.position === "RB" || player.position === "LB") {
                 rating += calculatePlayerRating(player, "back", formation)
             }
@@ -102,8 +104,27 @@ export const calculateTeamRating = (team, formation) => {
             }
         });
     }
-    return parseFloat((rating / 11).toFixed(2));
+    rating = parseFloat((rating / 11).toFixed(2));
+    rating += calcNations(nations);
+    return rating
 }
+
+const calcNations = (nations) => {
+    let ratingToAdd = 0;
+    for (const playerNum in nations) {
+        console.log(nations[playerNum]);
+        if (nations[playerNum] < 3) { }
+
+        else if (nations[playerNum] >= 3 && nations[playerNum] <= 5) { ratingToAdd += 2; }
+
+        else if (nations[playerNum] >= 6 && nations[playerNum] <= 9) { ratingToAdd += 4.5; }
+
+        else { ratingToAdd += 5.8; }
+
+    }
+    return ratingToAdd;
+}
+
 const calculatePlayerRating = (player, pos, formation) => {//if player in the right position add 5% to his rating
     let rating = 0;
     let calc = 0;
@@ -195,7 +216,7 @@ export const playFinalGame = (rating, rivalRating, teamScoreProp, rivalScoreProp
             }
         }
     }
-    return ({ team:teamScore, rival:rivalScore })
+    return ({ team: teamScore, rival: rivalScore })
 }
 const calcGoal = (maxScore, minScore) => {
     let difference = parseFloat((maxScore - minScore).toFixed(2)) - minScore * 0.4;

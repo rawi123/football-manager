@@ -55,7 +55,6 @@ function App() {
   const updateUser=(user)=>{//update the user
     setLoggedUser(user);
     sessionStorage.setItem("user", JSON.stringify(user));
-
   }
 
   return (
@@ -85,7 +84,7 @@ function App() {
             <Train user={loggedUser} handelUpgradeCB={update}  formationProp={formation} team={team}/>
           </Route>
           <Route exact path="/game">
-            <Game user={loggedUser} players={players} updateUser={updateUser}  formationProp={formation} team={team}/>
+            <Game setUserCB={setLoggedUser} user={loggedUser} players={players} updateUser={updateUser}  formationProp={formation} team={team}/>
           </Route>
         </Switch>
       </BrowserRouter>

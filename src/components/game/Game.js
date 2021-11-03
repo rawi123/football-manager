@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
 import { playGameFunc, calculateTeamRating, playFinalGame } from './PlayGame'
-import PlayerCard from '../teamOverview/PlayerCard'
 import "./style.css"
 import stadium from "../../img/stadium2.jpg"
-import football from "../../img/football.png"
-import goal from "../../img/goal.png"
 import logo from "../../img/logo2.png"
-import Result from './Result'
-export default function Game({ user, team, formationProp, handelUpdate, players }) {
+import boo from "../../soundtrack/boo.m4a"
+import cheer from "../../soundtrack/cheer.m4a"
+import FinalResults from './FinalResults'
+import GameRunnining from './GameRunnining'
+import PlayersPreView from './PlayersPreView'
+import { putUser } from '../../api'
+import { toast, ToastContainer } from 'react-toastify';
+
+export default function Game({ user, team, formationProp, setUserCB, players }) {
     const [enable, setEnable] = useState(false);
     const [rivalTeam, setRivalTeam] = useState("");
     const [savedPlayer, setSavedPlayer] = useState("");
@@ -24,7 +28,7 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
         top: "40.5%",
         left: "46.5%"
     })
-    const [goalClass, setGoalClass] = useState("no-ball")
+    const [goalClass, setGoalClass] = useState("no-goal")
     useEffect(() => {
         if (players.length)
             setEnable(true)
@@ -33,12 +37,14 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
     useEffect(() => {
         let intev = 0
         if (gamePlaying === "playing") {
+            let num = Math.floor(Math.random() * 3000 + 500)
             intev = setInterval(() => {
+                num = Math.floor(Math.random() * 3000 + 500);
                 setLeftTop({
                     top: Math.floor(Math.random() * 85) + "%",
                     left: Math.floor(Math.random() * 85) + "%"
                 })
-            }, Math.floor(Math.random() * 3000 + 500));
+            }, num);
             setInterv(interv)
         }
         return (() => {
@@ -65,103 +71,103 @@ export default function Game({ user, team, formationProp, handelUpdate, players 
         setGenLeft(genLeft + 1)
         setRivalRating(calculateTeamRating(rivalTeam.team, rivalTeam.formation))
     }
-    const returnPlayers = () => {//return array of players as divs and add handlers 
-        let temp = [],
-            arr = [],
-            counter = 0;
-        for (const position in rivalTeam.formation) {
-            const player = (rivalTeam.teamLite.find(val => rivalTeam.formation[position] === parseInt(val.id))) || {}
-            arr.push(<div
-                key={position}
-                onClick={() => { savedPlayer !== player ? setSavedPlayer(player) : setSavedPlayer("") }}
-                style={{ background: `url(${player.image})no-repeat center center/cover` }}
-                className={`card`} data-player-position={position.slice(0, 2)}>
-            </div>)
 
-            if (counter === 2 || counter === 5 || counter === 9 || counter === 10) {
-                temp.push(<div key={position} className="position-row">{arr.map(val => val)}</div>)
-                arr = []
-            }
-            counter++;
-        }
-        return temp
-    }
+    const notifyFail = () => toast.error("Error money not added", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
 
     const playGame = () => {
         if (!enable)
             return
-        const num = 10000;
-        const teamRating = calculateTeamRating(team, formationProp)
+        const num = 10000,
+            teamRating = calculateTeamRating(team, formationProp)
+        let interval1Time = Math.floor((Math.random() * (num - 1500)) + 1500),
+            gameScore = { ...score };
         setGamePlaying("playing")
-        setRivalRating(0)
         setGenLeft(1)
         const goalScorrer = setInterval(() => {
-            const newScore=playFinalGame(teamRating, rivalRating, score.team, score.rival);
-            setScore(newScore)
-            if(score.rival===newScore.rival){
-                setLeftTop({
-                    top: "40.5%",
-                    left: "0"
-                })
-            }
-            else{
+            const newScore = playFinalGame(teamRating, rivalRating, gameScore.team, gameScore.rival);
+            if (gameScore.rival === newScore.rival) {
                 setLeftTop({
                     top: "40.5%",
                     left: "93%"
                 })
+                new Audio(cheer).play()
             }
+            else {
+                setLeftTop({
+                    top: "40.5%",
+                    left: "0"
+                })
+                new Audio(boo).play()
+            }
+            gameScore = { ...newScore }
+            interval1Time = Math.floor((Math.random() * (num - 1500)) + 1500);
+            setScore({ ...newScore })
             setGoalClass("fullBall")
             setTimeout(() => {
                 setGoalClass("hidden")
             }, 1000);
-
-        }, Math.floor(Math.random() * num));
+        }, interval1Time);
         setTimeout(() => {
-            setRivalTeam("")
-            setGamePlaying("result")
-            clearInterval(goalScorrer);
-            setGoalClass("no-ball")
+            gameEnd(goalScorrer, gameScore)
         }, num);
-
     }
-    console.log(goalClass);
+    const gameEnd = (goalScorrer, gameScore) => {
+        setRivalTeam("")
+        setGamePlaying("result")
+        clearInterval(goalScorrer);
+        setGoalClass("no-goal")
+        setRivalRating(0)
+        updateUserInfo(gameScore)
+    }
+    const updateUserInfo = async(gameScore) => {
+        try{
+            let money = 0;
+            if (gameScore.team > gameScore.rival) {
+                money = 8000;
+            }
+            else if (gameScore.team === gameScore.rival) {
+                money = 4000;
+            }
+            else {
+                money = 1000;
+            }
+            const userTemp = { ...user }
+            userTemp["money"] = userTemp.money + money
+            setUserCB(userTemp)
+            await putUser(user.id,{ "money": user.money + money })
+        }
+        catch{
+            notifyFail()
+            setUserCB(user)
+        }
+    }
+
+
     if (gamePlaying === "playing") {
         return (
-            <div className="pitch-result">
-                <Result myTeam={user.teamName} myScore={score.team} rivalScore={score.rival} />
-                <div className="pitch" style={{ background: `url(${stadium})no-repeat center center/cover` }}>
-                    <img src={goal} alt="goal" className={goalClass} />
-                    <img alt="ball" src={football} className="football" style={{ left: leftTop.left, top: leftTop.top }}></img>
-                </div>
-            </div>
+            <GameRunnining user={user} score={score} stadium={stadium} goalClass={goalClass} leftTop={leftTop} />
         )
     }
     else if (gamePlaying === "result") {
-        return (
-            <div className="result-container pitch-result">
-                <Result myTeam={user.teamName} myScore={score.team} rivalScore={score.rival} />
-                <button className={`game-btn result-btn `} onClick={() => enable ? (function () {
-                    setGamePlaying("");
-                    setScore({ team: 0, rival: 0 })
-                    generateTeam();
-                }()) : null}>Generate rival team</button>
-            </div>
+        return (<>
+            <ToastContainer />
+            <FinalResults enable={enable} setGamePlaying={setGamePlaying} setScore={setScore} generateTeam={generateTeam} user={user} score={score} />
+            </>
         )
     }
     return (
-
         <div className="game-container">
-            {console.log(score)}
-
             {rivalTeam ?
-                <div className="preview-container">
-                    <div className="preview-background">
-                        {rivalTeam ? returnPlayers() : null}
-                    </div>
-                    {savedPlayer ? <PlayerCard noSell={true} player={savedPlayer} enableSell={false} sellPlayer={() => { }} /> : null}
-                </div>
+                <PlayersPreView setSavedPlayer={setSavedPlayer} rivalTeam={rivalTeam} savedPlayer={savedPlayer} />
                 : null}
-
             <div className={`game-left ${rivalTeam ? "play-game-active" : "row"}`}>
                 {rivalTeam ? <>
                     <p>Generate left: {4 - genLeft}</p>
