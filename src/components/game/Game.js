@@ -68,9 +68,9 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
         }, 800);
         const rivalTeam = playGameFunc(team, formationProp, players);
         setRivalTeam(rivalTeam);
-        setSavedPlayer("")
-        setGenLeft(genLeft + 1)
-        setRivalRating(calculateTeamRating(rivalTeam.team, rivalTeam.formation))
+        setSavedPlayer("");
+        setGenLeft(genLeft + 1);
+        setRivalRating(calculateTeamRating(rivalTeam.team, rivalTeam.formation));
     }
     const notifyFail = (text) => toast.error(text, {
         position: "top-right",
