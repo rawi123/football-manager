@@ -89,6 +89,7 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
                 team: onlineRival.team,
                 teamLite: genTeamLite(onlineRival.team)
             })
+            setRivalRating(calculateTeamRating(onlineRival.team, onlineRival.formation))
         }
         else {
             notifyFail("No games ATM!")

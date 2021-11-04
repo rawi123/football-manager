@@ -74,7 +74,7 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
 
     const sortBy = (str) => {
         const temp = [...playerToBuy]
-        if (str === "name"||str==="position")
+        if (str === "name"||str==="position" || str==="nationality")
             setPlayerToBuy(temp.sort((a, b) => cheapToExpensive ? a[str].localeCompare(b[str]) : b[str].localeCompare(a[str])))
 
         else
@@ -230,7 +230,7 @@ export default function Shop({ players, userTeam, userProp, updateUserFather, fo
                         <th>GK</th>
                         <th className="sort-by" onClick={() => sortBy("position")}>Position <i className="fas fa-sort-down"></i></th>
                         <th className="sort-by" onClick={() => sortBy("price")}>Price<i className="fas fa-money-bill money-icon"></i><i className="fas fa-sort-down"></i></th>
-                        <th>nationality</th>
+                        <th className="sort-by" onClick={() => sortBy("nationality")}>nationality <i className="fas fa-sort-down"></i></th>
                         <th>image</th>
                         <th></th>
                     </tr>

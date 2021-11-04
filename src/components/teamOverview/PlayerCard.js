@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Button } from 'react-bootstrap'
-export default function PlayerCard({noSell, player,sellPlayer,enableSell }) {
-    if(!player.id){
+export default function PlayerCard({ noSell, player, sellPlayer, enableSell }) {
+    if (!player.id) {
         return <></>
     }
     return (
@@ -9,10 +9,16 @@ export default function PlayerCard({noSell, player,sellPlayer,enableSell }) {
             <Card.Img variant="top" src={player.image} style={{ width: '4rem' }} />
             <Card.Body>
                 <Card.Title>{player.name}</Card.Title>
+
                 {player.position === "GK" ?
-                    <Card.Text>
-                        Goal Keeping: {player.goalKeeping}
-                    </Card.Text> :
+                    <>
+                        <Card.Text>
+                            Goal Keeping: {player.goalKeeping}
+                        </Card.Text>
+                        <Card.Text>
+                            Nationality: {player.nationality}
+                        </Card.Text>
+                    </> :
                     <React.Fragment>
                         <Card.Text>
                             Attack: {player.attack}
@@ -23,10 +29,13 @@ export default function PlayerCard({noSell, player,sellPlayer,enableSell }) {
                         <Card.Text>
                             Game Vision: {player.gameVision}
                         </Card.Text>
+                        <Card.Text>
+                            Nationality: {player.nationality}
+                        </Card.Text>
                     </React.Fragment>
                 }
-            {!noSell?<Button variant="primary" onClick={()=>enableSell?sellPlayer(player):null}>Sell-{(80/100)*parseInt(player.price)}</Button>:null}
-            
+                {!noSell ? <Button variant="primary" onClick={() => enableSell ? sellPlayer(player) : null}>Sell-{(80 / 100) * parseInt(player.price)}</Button> : null}
+
             </Card.Body>
             <Card.Footer className="">{player.position}</Card.Footer>
         </Card>
