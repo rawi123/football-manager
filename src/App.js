@@ -100,7 +100,7 @@ function App() {
             {loggedUser.isAdmin ? <FormStructure Children={<MakePlayer user={loggedUser} />} /> : null}
           </Route>
           <Route exact path="/">
-            <Home players={players} ></Home>
+            <Home user={loggedUser} ></Home>
           </Route>
           <Route exact path="/shop">
             <Shop formation={formation} userTeam={team} userProp={loggedUser} players={players} updateUserFather={update} />

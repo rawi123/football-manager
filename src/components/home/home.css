@@ -1,14 +1,28 @@
-
-#home{
+#global-container{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 5vh;
+}
+#home{
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 70%;
+    position: relative;
+    background: #dbdbdbd3;
+}
+#home h4{
+    position: absolute;
+    color: rgb(14, 12, 15);
+    font-size: 2.3rem;
+    font-weight: 700;
+    top: 10px;
 }
 .home-container{
-    width: 70%;
     padding: 5rem 1rem;
-    margin-top: 5vh;
-    background: #dbdbdbd3;
     border-radius: 10px;
     position: relative;
 }
@@ -89,8 +103,27 @@
     margin: 1rem;
 
 }
-.hiOrLog a{
-    text-decoration: none;
+
+.nav-home{
+    width: 40%;
+}
+.nav-home >ul{
+    list-style: inside;
+    padding:0;
+}
+.nav-home ul li{
+    background: #251e1e99;
+    color: white;
+    margin-top: 1rem;
+    padding: .7rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+.nav-home ul li:hover{
+    opacity: 0.8;
+}
+.nav-home ul a{
+    text-decoration: none ;
 }
 
 @media (max-width:830px) {
