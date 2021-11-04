@@ -9,7 +9,11 @@ export default function League() {
     useEffect(() => {
         (async function (){
             let usersTemp=((await getUsers()).data)
-            usersTemp.sort((a,b)=>b.points-a.points)
+            usersTemp.sort((a,b)=>{
+                if(b.points-a.points!==0)
+                    return b.points-a.points
+                return a.games-b.games
+            })
             setAllUsers(usersTemp)
         }())
     }, [])
