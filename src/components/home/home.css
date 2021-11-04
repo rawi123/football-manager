@@ -113,12 +113,13 @@
     padding:0;
 }
 .nav-home ul li{
-    background: #251e1e99;
+    background: #55202099;
     color: white;
     margin-top: 1rem;
     padding: .7rem;
     font-size: 1.4rem;
     cursor: pointer;
+    border-radius: 10px;
 }
 .nav-home ul li:hover{
     opacity: 0.8;
