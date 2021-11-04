@@ -8,7 +8,9 @@ export default function League() {
     const [allUsers, setAllUsers] = useState("")
     useEffect(() => {
         (async function (){
-            setAllUsers((await getUsers()).data)
+            let usersTemp=((await getUsers()).data)
+            usersTemp.sort((a,b)=>b.points-a.points)
+            setAllUsers(usersTemp)
         }())
     }, [])
 
