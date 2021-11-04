@@ -1,0 +1,101 @@
+
+#home{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.home-container{
+    width: 70%;
+    padding: 5rem 1rem;
+    margin-top: 5vh;
+    background: #dbdbdbd3;
+    border-radius: 10px;
+    position: relative;
+}
+.logo-home{
+    top: 0;
+    left: calc(50% - 70px);
+    width: 140px;
+    height: 140px;
+    border-top-left-radius: inherit;
+}
+#home h1{
+    font-size: 2rem;
+    margin: 1rem;
+}
+.content{
+    background: #4e4e4e99;
+    color: white;
+    text-align: justify;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 1.2rem;
+}
+.content span{
+    display: inline !important;
+    font-weight: 700;
+}
+.social-media{
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+    justify-content: space-around;
+    grid-row: 18;
+    flex-direction: column;
+}
+.social-media>div{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    width: 80%;
+}
+.social-media i{
+    font-size: 2.5rem;
+    transition: all 0.3s ease;
+    width:100%;
+    height: 100%;
+    color: #3e1a61;
+}
+.social-media a:hover,
+.social-media a:hover>*{
+    transition: all 0.3s ease;
+    transform: scale(1.08);
+    color:purple !important;
+}
+.social-media a{
+    display: block;
+}
+.links{
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.rawi h3{
+    border-radius: 4px;
+}
+.hiOrLog{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 1rem;
+
+}
+.hiOrLog a{
+    text-decoration: none;
+}
+
+@media (max-width:830px) {
+    .home-container{width: 100%;}
+    .social-media>div{
+        flex-direction: column;
+    }
+}

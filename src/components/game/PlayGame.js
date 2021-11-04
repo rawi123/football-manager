@@ -232,6 +232,7 @@ export const genTeamLite=(team)=>{
     for (const pos in team){
         team[pos].map(val=>{
             teamLite.push(val)
+            return 1;
         })
     }
     return (teamLite);
