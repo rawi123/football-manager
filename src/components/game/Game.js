@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router'
-import { playGameFunc, calculateTeamRating, playFinalGame } from './PlayGame'
+import { playGameFunc, calculateTeamRating, playFinalGame, genTeamLite } from './PlayGame'
 import "./style.css"
 import stadium from "../../img/stadium2.jpg"
 import logo from "../../img/logo2.png"
@@ -12,14 +12,15 @@ import PlayersPreView from './PlayersPreView'
 import { putUser } from '../../api'
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function Game({ user, team, formationProp,updateUserCB, players }) {
+export default function Game({ user, team, formationProp, updateUserCB, players, onlineRival }) {
     const [enable, setEnable] = useState(false);
     const [rivalTeam, setRivalTeam] = useState("");
     const [savedPlayer, setSavedPlayer] = useState("");
     const [genLeft, setGenLeft] = useState(1);
     const [rivalRating, setRivalRating] = useState(0);
     const [gamePlaying, setGamePlaying] = useState("");
-    const [interv, setInterv] = useState(0)
+    const [interv, setInterv] = useState(0);
+
     const [score, setScore] = useState({
         rival: 0,
         team: 0
@@ -29,6 +30,7 @@ export default function Game({ user, team, formationProp,updateUserCB, players }
         left: "46.5%"
     })
     const [goalClass, setGoalClass] = useState("no-goal")
+
     useEffect(() => {
         if (players.length)
             setEnable(true)
@@ -64,13 +66,12 @@ export default function Game({ user, team, formationProp,updateUserCB, players }
         setTimeout(() => {
             setEnable(true)
         }, 800);
-        const rivalTeam = playGameFunc(team, formationProp, players)
+        const rivalTeam = playGameFunc(team, formationProp, players);
         setRivalTeam(rivalTeam);
         setSavedPlayer("")
         setGenLeft(genLeft + 1)
         setRivalRating(calculateTeamRating(rivalTeam.team, rivalTeam.formation))
     }
-
     const notifyFail = (text) => toast.error(text, {
         position: "top-right",
         autoClose: 3000,
@@ -81,14 +82,28 @@ export default function Game({ user, team, formationProp,updateUserCB, players }
         progress: undefined,
     });
 
+    const generateRival = () => {
+        if (Object.keys(onlineRival).length > 0) {
+            setRivalTeam({
+                formation: onlineRival.formation,
+                team: onlineRival.team,
+                teamLite: genTeamLite(onlineRival.team)
+            })
+        }
+        else {
+            notifyFail("No games ATM!")
+        }
+    }
+
+
     const playGame = () => {
         if (!enable)
             return
-        if(user.energy<=0){
-            notifyFail("not enough energy!")
+        if (user.energy <= 0) {
+            notifyFail("Not enough energy!")
             return
         }
-        const num = 10000,
+        const num = 15000,
             teamRating = calculateTeamRating(team, formationProp)
         let interval1Time = Math.floor((Math.random() * (num - 1500)) + 1500),
             gameScore = { ...score };
@@ -132,25 +147,33 @@ export default function Game({ user, team, formationProp,updateUserCB, players }
     }
     const updateUserInfo = async (gameScore) => {
         try {
-            let money = 0;
+            let money = 0,
+                points = 0;
             if (gameScore.team > gameScore.rival) {
                 money = 8000;
+                points=3;
             }
             else if (gameScore.team === gameScore.rival) {
                 money = 4000;
+                points=1;
             }
             else {
                 money = 1000;
+                points=0;
             }
             const userTemp = { ...user };
             userTemp["money"] = userTemp.money + money;
             userTemp["energy"] -= 10;
+            userTemp["points"]=userTemp.points+points;
+            userTemp["games"]++;
             userTemp["gamesDate"].push(new Date())
             updateUserCB(userTemp);
             await putUser(user.id, {
                 "money": user.money + money,
-                energy:userTemp["energy"],
-                gamesDate:userTemp["gamesDate"]
+                energy: userTemp["energy"],
+                gamesDate: userTemp["gamesDate"],
+                games:userTemp.games,
+                points:userTemp.points
             });
         }
         catch {
@@ -174,6 +197,7 @@ export default function Game({ user, team, formationProp,updateUserCB, players }
     }
     return (
         <div className="game-container">
+            <ToastContainer />
             {rivalTeam ?
                 <PlayersPreView setSavedPlayer={setSavedPlayer} rivalTeam={rivalTeam} savedPlayer={savedPlayer} />
                 : null}
@@ -185,6 +209,7 @@ export default function Game({ user, team, formationProp,updateUserCB, players }
                     <button className={`game-btn`} onClick={() => enable ? playGame() : null}>
                         play-game
                     </button> </> : <img src={logo} style={{ width: "20rem", height: "14rem", marginTop: "2vw", marginBottom: "2vw" }} alt="my-logo" />}
+                {!rivalTeam ? <button className={`game-btn `} onClick={() => enable ? generateRival() : null}>Play Online</button> : null}
                 <button className={`game-btn `} onClick={() => enable ? generateTeam() : null}>Generate rival team</button>
             </div>
         </div>

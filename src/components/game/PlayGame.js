@@ -226,3 +226,13 @@ const calcGoal = (maxScore, minScore) => {
     }
     else return "min"
 }
+
+export const genTeamLite=(team)=>{
+    const teamLite=[]
+    for (const pos in team){
+        team[pos].map(val=>{
+            teamLite.push(val)
+        })
+    }
+    return (teamLite);
+}

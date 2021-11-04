@@ -53,6 +53,8 @@ export default function SignupForm({ users, addUser }) {
 			money: 100000,
 			energy:100,
 			gamesDate:[],
+			points:0,
+			games:0,
 			password: input.password,
 			username: input.username,
 			teamName: input.teamName
