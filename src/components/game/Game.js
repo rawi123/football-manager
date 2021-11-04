@@ -12,7 +12,7 @@ import PlayersPreView from './PlayersPreView'
 import { putUser } from '../../api'
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function Game({ user, generateOnlineRival,allUsers,team, formationProp, updateUserCB, players, onlineRival }) {
+export default function Game({ user, generateOnlineRival, allUsers, team, formationProp, updateUserCB, players, onlineRival }) {
     const [enable, setEnable] = useState(false);
     const [rivalTeam, setRivalTeam] = useState("");
     const [savedPlayer, setSavedPlayer] = useState("");
@@ -89,7 +89,6 @@ export default function Game({ user, generateOnlineRival,allUsers,team, formatio
                 team: onlineRival.team,
                 teamLite: genTeamLite(onlineRival.team)
             })
-
         }
         else {
             notifyFail("No games ATM!")
@@ -145,7 +144,8 @@ export default function Game({ user, generateOnlineRival,allUsers,team, formatio
         setGoalClass("no-goal");
         setRivalRating(0);
         updateUserInfo(gameScore);
-        generateOnlineRival(allUsers,user)
+        setLeftTop({ top: "40.5%", left: "46.5%" })
+        generateOnlineRival(allUsers, user)
     }
     const updateUserInfo = async (gameScore) => {
         try {
@@ -153,20 +153,20 @@ export default function Game({ user, generateOnlineRival,allUsers,team, formatio
                 points = 0;
             if (gameScore.team > gameScore.rival) {
                 money = 8000;
-                points=3;
+                points = 3;
             }
             else if (gameScore.team === gameScore.rival) {
                 money = 4000;
-                points=1;
+                points = 1;
             }
             else {
                 money = 1000;
-                points=0;
+                points = 0;
             }
             const userTemp = { ...user };
             userTemp["money"] = userTemp.money + money;
             userTemp["energy"] -= 10;
-            userTemp["points"]=userTemp.points+points;
+            userTemp["points"] = userTemp.points + points;
             userTemp["games"]++;
             userTemp["gamesDate"].push(new Date())
             updateUserCB(userTemp);
@@ -174,8 +174,8 @@ export default function Game({ user, generateOnlineRival,allUsers,team, formatio
                 "money": user.money + money,
                 energy: userTemp["energy"],
                 gamesDate: userTemp["gamesDate"],
-                games:userTemp.games,
-                points:userTemp.points
+                games: userTemp.games,
+                points: userTemp.points
             });
         }
         catch {
