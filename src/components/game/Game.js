@@ -39,7 +39,7 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
     useEffect(() => {
         let intev = 0
         if (gamePlaying === "playing") {
-            let num = Math.floor(Math.random() * 3000 + 500)
+            let num = Math.floor(Math.random() * 3000 + 1000)
             intev = setInterval(() => {
                 num = Math.floor(Math.random() * 3000 + 500);
                 setLeftTop({
