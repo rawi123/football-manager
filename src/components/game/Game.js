@@ -12,7 +12,7 @@ import PlayersPreView from './PlayersPreView'
 import { putUser } from '../../api'
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function Game({ user, team, formationProp, updateUserCB, players, onlineRival }) {
+export default function Game({ user, generateOnlineRival,allUsers,team, formationProp, updateUserCB, players, onlineRival }) {
     const [enable, setEnable] = useState(false);
     const [rivalTeam, setRivalTeam] = useState("");
     const [savedPlayer, setSavedPlayer] = useState("");
@@ -89,6 +89,7 @@ export default function Game({ user, team, formationProp, updateUserCB, players,
                 team: onlineRival.team,
                 teamLite: genTeamLite(onlineRival.team)
             })
+
         }
         else {
             notifyFail("No games ATM!")
@@ -144,6 +145,7 @@ export default function Game({ user, team, formationProp, updateUserCB, players,
         setGoalClass("no-goal");
         setRivalRating(0);
         updateUserInfo(gameScore);
+        generateOnlineRival(allUsers,user)
     }
     const updateUserInfo = async (gameScore) => {
         try {
@@ -191,7 +193,7 @@ export default function Game({ user, team, formationProp, updateUserCB, players,
     else if (gamePlaying === "result") {
         return (<>
             <ToastContainer />
-            <FinalResults enable={enable} setGamePlaying={setGamePlaying} setScore={setScore} generateTeam={generateTeam} user={user} score={score} />
+            <FinalResults generateRival={generateRival} enable={enable} setGamePlaying={setGamePlaying} setScore={setScore} generateTeam={generateTeam} user={user} score={score} />
         </>
         )
     }

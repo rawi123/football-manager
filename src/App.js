@@ -42,7 +42,6 @@ function App() {
     if (allUsers.length > 1) {
       let num = Math.floor(Math.random() * (allUsers.length))+1;
       while (parseInt(num) === parseInt(userTemp.id)) {
-        console.log(num,"123");
         num = Math.floor(Math.random() * (allUsers.length))+1;
       }
       const rival = (await getTeam(num)).data[0]
@@ -113,7 +112,7 @@ function App() {
             <Train user={loggedUser} handelUpgradeCB={update} formationProp={formation} team={team} />
           </Route>
           <Route exact path="/game">
-            <Game onlineRival={onlineRival} user={loggedUser} players={players} updateUserCB={updateUser} formationProp={formation} team={team} />
+            <Game allUsers={users} generateOnlineRival={generateOnlineRival} onlineRival={onlineRival} user={loggedUser} players={players} updateUserCB={updateUser} formationProp={formation} team={team} />
           </Route>
           <Route exact path="/leagueTable">
             <League/>
