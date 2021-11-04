@@ -115,7 +115,7 @@ function App() {
             <Game allUsers={users} generateOnlineRival={generateOnlineRival} onlineRival={onlineRival} user={loggedUser} players={players} updateUserCB={updateUser} formationProp={formation} team={team} />
           </Route>
           <Route exact path="/leagueTable">
-            <League/>
+            <League setUsers={setUsers}/>
           </Route>
         </Switch>
       </BrowserRouter>

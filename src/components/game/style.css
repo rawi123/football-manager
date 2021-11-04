@@ -37,6 +37,10 @@
 	justify-content: center;
 	flex-direction: column;
 }
+.pitch-result h1{
+	color: white;
+	padding: .3rem;
+}
 .results {
 	color: white;
 	background: #000009bb;
@@ -82,7 +86,7 @@
 }
 .pitch {
 	position: relative;
-	margin-top: 10vh;
+	margin-top: 3vh;
 	width: 50%;
 	height: 50vh;
 }

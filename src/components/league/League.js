@@ -4,24 +4,25 @@ import { Table, } from 'react-bootstrap'
 import { getUsers } from '../../api'
 import football from "../../img/football.png"
 
-export default function League() {
+export default function League({ setUsers }) {
     const [allUsers, setAllUsers] = useState("")
     useEffect(() => {
-        (async function (){
-            let usersTemp=((await getUsers()).data);
-            usersTemp.sort((a,b)=>{
-                if(b.points-a.points!==0)
-                    return b.points-a.points
-                return a.games-b.games
+        (async function () {
+            let usersTemp = ((await getUsers()).data);
+            usersTemp.sort((a, b) => {
+                if (b.points - a.points !== 0)
+                    return b.points - a.points
+                return a.games - b.games
             })
             setAllUsers(usersTemp);
+            setUsers(usersTemp);
         }())
     }, [])
 
     return (
         <div className="table-container">
-            {!allUsers ?  <><img alt="ball" src={football} className="football" style={{ left:"46%", top: "20vh" }}></img><div className="loader-shop"><h1>Loading Data</h1>
-                <div id="loading"></div> </div> </>: null}
+            {!allUsers ? <><img alt="ball" src={football} className="football" style={{ left: "46%", top: "20vh" }}></img><div className="loader-shop"><h1>Loading Data</h1>
+                <div id="loading"></div> </div> </> : null}
             <Table striped hover responsive="sm" variant="dark" >
                 <thead className="table-row">
                     <tr>
@@ -32,9 +33,9 @@ export default function League() {
                     </tr>
                 </thead>
                 <tbody>
-                    {allUsers ? allUsers.map(val => <LeagueTr key={val.id} user={val}></LeagueTr>) :null}
+                    {allUsers ? allUsers.map((val,i) => <LeagueTr num={i} key={val.id} user={val}></LeagueTr>) : null}
                 </tbody>
-                
+
             </Table>
         </div>
     )

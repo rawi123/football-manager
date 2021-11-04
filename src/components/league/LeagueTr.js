@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function TableTr({user}) {
+export default function TableTr({user,num}) {
     return (
         <tr className="table-row">
-            <td>{user.id}</td>
+            <td>{num+1}</td>
             <td>{user.teamName}</td>
             <td>{user.points}</td>
             <td>{user.games}</td>
