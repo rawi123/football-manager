@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Result({myTeam,myScore,rivalScore}) {
+export default function Result({rivalName,myTeam,myScore,rivalScore}) {
     return (
         <div className="results">
-            {myTeam} {myScore} - {rivalScore} rival team
+            {myTeam} {myScore} - {rivalScore} {rivalName?rivalName:"rival team"}
         </div>
     )
 }

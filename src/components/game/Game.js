@@ -12,7 +12,7 @@ import PlayersPreView from './PlayersPreView'
 import { putUser } from '../../api'
 import { toast, ToastContainer } from 'react-toastify';
 
-export default function Game({ user, generateOnlineRival, allUsers, team, formationProp, updateUserCB, players, onlineRival }) {
+export default function Game({ user,onlineRivalName, generateOnlineRival, allUsers, team, formationProp, updateUserCB, players, onlineRival }) {
     const [enable, setEnable] = useState(false);
     const [rivalTeam, setRivalTeam] = useState("");
     const [savedPlayer, setSavedPlayer] = useState("");
@@ -20,6 +20,7 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
     const [rivalRating, setRivalRating] = useState(0);
     const [gamePlaying, setGamePlaying] = useState("");
     const [interv, setInterv] = useState(0);
+    const [rivalName,setRivalName]=useState(onlineRivalName);
 
     const [score, setScore] = useState({
         rival: 0,
@@ -31,10 +32,13 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
     })
     const [goalClass, setGoalClass] = useState("no-goal")
 
+
     useEffect(() => {
         if (players.length)
             setEnable(true)
     }, [players])
+
+
 
     useEffect(() => {
         let intev = 0
@@ -55,6 +59,7 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
         //eslint-disable-next-line
     }, [gamePlaying])
 
+
     if (Object.keys(user).length === 0) {
         return <Redirect to="/login" />
     }
@@ -63,6 +68,7 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
         if (!enable || genLeft === 4)
             return
         setEnable(false)
+        setRivalName(false)
         setTimeout(() => {
             setEnable(true)
         }, 800);
@@ -89,14 +95,13 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
                 team: onlineRival.team,
                 teamLite: genTeamLite(onlineRival.team)
             })
-            setRivalRating(calculateTeamRating(onlineRival.team, onlineRival.formation))
+            setRivalName(onlineRivalName)
+            setRivalRating(calculateTeamRating(onlineRival.team, onlineRival.formation));
         }
         else {
             notifyFail("No games ATM!")
         }
     }
-
-
     const playGame = () => {
         if (!enable)
             return
@@ -184,17 +189,16 @@ export default function Game({ user, generateOnlineRival, allUsers, team, format
             updateUserCB(user)
         }
     }
-
-
+    
     if (gamePlaying === "playing") {
         return (
-            <GameRunnining user={user} score={score} stadium={stadium} goalClass={goalClass} leftTop={leftTop} />
+            <GameRunnining rivalName={rivalName} user={user} score={score} stadium={stadium} goalClass={goalClass} leftTop={leftTop} />
         )
     }
     else if (gamePlaying === "result") {
         return (<>
             <ToastContainer />
-            <FinalResults generateRival={generateRival} enable={enable} setGamePlaying={setGamePlaying} setScore={setScore} generateTeam={generateTeam} user={user} score={score} />
+            <FinalResults rivalName={rivalName} generateRival={generateRival} enable={enable} setGamePlaying={setGamePlaying} setScore={setScore} generateTeam={generateTeam} user={user} score={score} />
         </>
         )
     }

@@ -17,6 +17,7 @@ export default function League({ setUsers }) {
             setAllUsers(usersTemp);
             setUsers(usersTemp);
         }())
+       //eslint-disable-next-line
     }, [])
 
     return (

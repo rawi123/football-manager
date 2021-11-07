@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import goal from "../../img/goal.png"
 import football from "../../img/football.png"
 import Result from './Result'
-export default function GameRunnining({ user, score, stadium, goalClass, leftTop }) {
+export default function GameRunnining({ rivalName,user, score, stadium, goalClass, leftTop }) {
 
     const [time, setTime] = useState(0)
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function GameRunnining({ user, score, stadium, goalClass, leftTop
     }
     return (
         <div className="pitch-result">
-            <Result myTeam={user.teamName} myScore={score.team} rivalScore={score.rival} />
+            <Result rivalName={rivalName} myTeam={user.teamName} myScore={score.team} rivalScore={score.rival} />
             <h1>Game time:15</h1>
             <h1>{msToTime(time)}</h1>
             <div className="pitch" style={{ background: `url(${stadium})no-repeat center center/cover` }}>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Result from './Result';
 import logo from "../../img/logo2.png"
 
-export default function FinalResults({ setGamePlaying, setScore, generateRival, generateTeam, user, score, enable }) {
+export default function FinalResults({ rivalName,setGamePlaying, setScore, generateRival, generateTeam, user, score, enable }) {
     const [localScore, setLocalScore] = useState(score)
     useEffect(() => {
         setLocalScore(score)
@@ -10,7 +10,7 @@ export default function FinalResults({ setGamePlaying, setScore, generateRival, 
     return (
         <div className="result-container pitch-result">
             <img src={logo} style={{ width: "20rem", height: "14rem", marginTop: "2vw", marginBottom: "2vw" }} alt="my-logo" />
-            <Result myTeam={user.teamName} myScore={localScore.team} rivalScore={localScore.rival} />
+            <Result rivalName={rivalName} myTeam={user.teamName} myScore={localScore.team} rivalScore={localScore.rival} />
             <button className={`game-btn `} onClick={() => enable ? (function () {
                 setGamePlaying("");
                 generateRival();

@@ -45,8 +45,12 @@ function App() {
         num = Math.floor(Math.random() * (allUsers.length))+1;
       }
       const rival = (await getTeam(num)).data[0]
-      setOnlineRival(rival)
-      sessionStorage.setItem("rival", JSON.stringify(rival))
+      const rivalObj={
+        team:rival,
+        name:allUsers[num].teamName
+      }
+      setOnlineRival(rivalObj)
+      sessionStorage.setItem("rival", JSON.stringify(rivalObj))
     }
   }
 
@@ -112,7 +116,7 @@ function App() {
             <Train user={loggedUser} handelUpgradeCB={update} formationProp={formation} team={team} />
           </Route>
           <Route exact path="/game">
-            <Game allUsers={users} generateOnlineRival={generateOnlineRival} onlineRival={onlineRival} user={loggedUser} players={players} updateUserCB={updateUser} formationProp={formation} team={team} />
+            <Game allUsers={users} generateOnlineRival={generateOnlineRival} onlineRival={onlineRival.team} onlineRivalName={onlineRival.name} user={loggedUser} players={players} updateUserCB={updateUser} formationProp={formation} team={team} />
           </Route>
           <Route exact path="/leagueTable">
             <League setUsers={setUsers}/>
