@@ -45,6 +45,11 @@ function App() {
         num = Math.floor(Math.random() * (allUsers.length))+1;
       }
       const rival = (await getTeam(num)).data[0]
+      console.log("online");
+      console.log(allUsers);
+      console.log(num);
+      console.log(allUsers[num]);
+      console.log("online-end");
       const rivalObj={
         team:rival,
         name:allUsers[num].teamName
@@ -58,7 +63,7 @@ function App() {
     const userTemp = { ...user }
     user.gamesDate.map(val => {//add energy if 3 hours pased
       if (parseInt((new Date() - new Date(val)) / 1000 / 60 / 60) >= 3) {
-        userTemp.gamesDate.splice(userTemp.gamesDate.indexOf(val), 1);
+        userTemp.gamesDate=userTemp.gamesDate.filter(dateTemp=>dateTemp !== val);
         userTemp["energy"] += 10;
       };
       return 1;
