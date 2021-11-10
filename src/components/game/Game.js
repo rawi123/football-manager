@@ -109,8 +109,8 @@ export default function Game({ user,onlineRivalName, generateOnlineRival, allUse
             notifyFail("Not enough energy!")
             return
         }
-        const num = 15000,
-            teamRating = calculateTeamRating(team, formationProp)
+        const num = 5000,
+            teamRating = calculateTeamRating(team, formationProp);
         let interval1Time = Math.floor((Math.random() * (num - 1500)) + 1500),
             gameScore = { ...score };
         setGamePlaying("playing")
