@@ -40,16 +40,11 @@ function App() {
 
   const generateOnlineRival = async (allUsers, userTemp) => {
     if (allUsers.length > 1) {
-      let num = Math.floor(Math.random() * (allUsers.length))+1;
+      let num = Math.floor(Math.random() * (allUsers.length-1))+1;
       while (parseInt(num) === parseInt(userTemp.id)) {
-        num = Math.floor(Math.random() * (allUsers.length))+1;
+        num = Math.floor(Math.random() * (allUsers.length-1))+1;
       }
       const rival = (await getTeam(num)).data[0]
-      console.log("online");
-      console.log(allUsers);
-      console.log(num);
-      console.log(allUsers[num]);
-      console.log("online-end");
       const rivalObj={
         team:rival,
         name:allUsers[num].teamName
